@@ -1,0 +1,129 @@
+.admin-dashboard {
+    padding: 20px;
+    background-color: #f5f6fa;
+}
+
+.welcome-section {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.welcome-message {
+    color: #1a1e40;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.action-buttons .btn-custom-primary,
+.action-buttons .btn-custom-outline {
+    border-radius: 50px;
+    padding: 8px 20px;
+}
+
+.action-buttons .btn-custom-primary {
+    background-color: #6a1b9a;
+    color: #fff;
+    border: none;
+}
+
+.action-buttons .btn-custom-primary:hover {
+    background-color: #4a148c;
+}
+
+.action-buttons .btn-custom-outline {
+    border: 1px solid #6a1b9a;
+    color: #6a1b9a;
+    background-color: transparent;
+}
+
+.action-buttons .btn-custom-outline:hover {
+    background-color: #6a1b9a;
+    color: #fff;
+}
+
+.recent-activity-section {
+    background-color: #eef1f6;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.recent-activity-card {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.activity-name {
+    color: #6a1b9a;
+    font-weight: bold;
+}
+
+.pagination-controls {
+    margin-top: 15px;
+}
+
+.pagination-controls .btn-pagination {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 15px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-controls .btn-pagination:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.admin-menu-section {
+    margin-top: 20px;
+}
+
+.admin-menu-section .menu-card {
+    background-color: #1a1e40;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.menu-header {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #212529;
+}
+
+.menu-item a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 992px) {
+    .recent-activity-section {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .admin-menu-section {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .welcome-section {
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+}

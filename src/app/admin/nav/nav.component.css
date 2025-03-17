@@ -1,0 +1,49 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #1a1e40;
+    padding: 0;
+}
+
+.sidebar-logo img {
+    max-width: 80%;
+    display: block;
+    margin: 0 auto;
+}
+
+.nav-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: #adb5bd;
+}
+
+.collapse .nav-link {
+    padding-left: 1.5rem;
+}
+
+.collapse .nav-link:hover {
+    color: #ced4da;
+}
+
+.nav-item .nav-item {
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+}
