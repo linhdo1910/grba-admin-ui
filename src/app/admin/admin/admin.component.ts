@@ -11,7 +11,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   standalone: false
 })
 export class AdminComponent implements OnInit, OnDestroy {
-  pageTitle = 'Trang chủ';
+  pageTitle = 'Homepage';
   profileName = 'Admin User';
   userRole = '';
   userAction = '';

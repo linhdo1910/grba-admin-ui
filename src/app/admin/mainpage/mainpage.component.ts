@@ -12,14 +12,15 @@ import { Subscription } from 'rxjs';
 export class MainpageComponent implements OnInit, OnDestroy {
   profileName: string = 'Admin';
   recentActivities = [
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'The Quinteen', action: 'edit' },
-    { category: 'Chức năng', item: 'Giảm giá', name: 'ChristmasEVE', action: 'view' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'Kính mắt Ann...', action: 'edit' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'ChristmasEVE', action: 'view' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'ChristmasEVE', action: 'edit' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'ChristmasEVE', action: 'view' },
+    { category: 'Features', item: 'Products', name: 'Sofa Japan', action: 'edit' },
+    { category: 'Features', item: 'Blogs', name: 'Blog Details', action: 'view' },
+    { category: 'Features', item: 'Homepage', name: 'The Kanso...', action: 'edit' },
+    { category: 'Features', item: 'Policies', name: 'Polices', action: 'view' },
+    { category: 'Features', item: 'Products', name: 'Customize', action: 'edit' },
+    { category: 'Features', item: 'Contact', name: 'Contact', action: 'view' },
   ];
   private subscription: Subscription | null = null;
+  
   private filterRecentActivities(): void {
     const action = this.authService.getAction() || 'just view';
     if (action !== 'edit all') {

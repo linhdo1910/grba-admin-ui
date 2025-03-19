@@ -1,6 +1,6 @@
 .admin-dashboard {
     padding: 20px;
-    background-color: #f5f6fa;
+    background-color:#f9f5f0;
 }
 
 .welcome-section {
@@ -10,7 +10,7 @@
 }
 
 .welcome-message {
-    color: #1a1e40;
+    color: #402A1D;
     font-weight: bold;
     font-size: 24px;
 }
@@ -22,28 +22,28 @@
 }
 
 .action-buttons .btn-custom-primary {
-    background-color: #6a1b9a;
+    background-color: #DAA86D;
     color: #fff;
     border: none;
 }
 
 .action-buttons .btn-custom-primary:hover {
-    background-color: #4a148c;
+    background-color: #DAA86D;
 }
 
 .action-buttons .btn-custom-outline {
-    border: 1px solid #6a1b9a;
-    color: #6a1b9a;
+    border: 1px solid #DAA86D;
+    color:#DAA86D;
     background-color: transparent;
 }
 
 .action-buttons .btn-custom-outline:hover {
-    background-color: #6a1b9a;
+    background-color: #DAA86D;
     color: #fff;
 }
 
 .recent-activity-section {
-    background-color: #eef1f6;
+    background-color: #f1f1f1;
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -57,7 +57,7 @@
 }
 
 .activity-name {
-    color: #6a1b9a;
+    color: #DAA86D;
     font-weight: bold;
 }
 
@@ -67,7 +67,7 @@
 
 .pagination-controls .btn-pagination {
     background-color: #fff;
-    color: #000;
+    color: #402A1D;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 5px 15px;
@@ -76,7 +76,7 @@
 
 .pagination-controls .btn-pagination:hover {
     background-color: #f0f0f0;
-    color: #000;
+    color: #402A1D;
 }
 
 .admin-menu-section {
@@ -84,9 +84,9 @@
 }
 
 .admin-menu-section .menu-card {
-    background-color: #1a1e40;
+    background-color: #402A1D;
     color: white;
-    border-radius: 5px;
+    border-radius: 3px;
     margin-bottom: 10px;
 }
 
@@ -98,13 +98,16 @@
 
 .menu-item a {
     text-decoration: none;
-    color: #212529;
+    color: #402A1D;
 }
 
 .menu-item a:hover {
     text-decoration: underline;
 }
 
+.fa-edit {
+    color: #DAA86D;
+}
 @media (max-width: 992px) {
     .recent-activity-section {
         flex: 0 0 100%;

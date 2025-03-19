@@ -1,12 +1,11 @@
 <div class="admin-dashboard container-fluid">
     <div class="row welcome-section align-items-center">
         <div class="col-12 col-md mb-3 mb-md-0">
-            <h2 class="welcome-message">Xin chào, {{ profileName }}</h2>
+            <h2 class="welcome-message">Welcome, {{ profileName }}</h2>
         </div>
         <div class="col-12 col-md-auto text-md-end action-buttons">
-            <button class="btn btn-custom-primary me-2 mb-2 mb-md-0" (click)="navigateToHome()">Trở về trang
-                web</button>
-            <button class="btn btn-custom-outline">Đổi mật khẩu</button>
+            <button class="btn btn-primary me-2 mb-2 mb-md-0" (click)="navigateToHome()">Return to Website</button>
+            <button class="btn btn-secondary">Change Password</button>
         </div>
     </div>
 
@@ -14,7 +13,7 @@
         <div class="col-12 col-lg-7 mb-4 mb-lg-0 recent-activity-section">
             <h5 class="section-title mb-3 d-flex align-items-center" data-bs-toggle="collapse"
                 data-bs-target="#recentActivities" aria-expanded="true">
-                <i class="fa fa-angle-down me-2"></i> Hoạt động gần đây
+                <i class="fa fa-angle-down me-2"></i> Recent Activities
             </h5>
             <div id="recentActivities" class="collapse show">
                 <div class="card mb-3 recent-activity-card" *ngFor="let activity of recentActivities">
@@ -25,9 +24,9 @@
                     </div>
                 </div>
                 <div class="pagination-controls d-flex justify-content-between">
-                    <button class="btn btn-pagination">Trước</button>
+                    <button class="btn btn-pagination">Previous</button>
                     <span>1/10</span>
-                    <button class="btn btn-pagination">Sau</button>
+                    <button class="btn btn-pagination">Next</button>
                 </div>
             </div>
         </div>
@@ -36,14 +35,14 @@
             <div class="card mb-3 menu-card">
                 <div class="card-header menu-header d-flex align-items-center" data-bs-toggle="collapse"
                     data-bs-target="#authMenu" aria-expanded="true">
-                    <i class="fa fa-angle-down me-2"></i> Xác thực
+                    <i class="fa fa-angle-down me-2"></i> Authentication
                 </div>
                 <ul id="authMenu" class="collapse show list-group list-group-flush menu-list">
                     <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin'" class="menu-link">Nhóm <i class="fa fa-edit float-end"></i></a>
+                        <a [routerLink]="'/admin'" class="menu-link">Groups <i class="fa fa-edit float-end"></i></a>
                     </li>
                     <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin/user-adm'" class="menu-link">Tài khoản <i
+                        <a [routerLink]="'/admin/user-adm'" class="menu-link">Accounts <i
                                 class="fa fa-edit float-end"></i></a>
                     </li>
                 </ul>
@@ -51,28 +50,25 @@
             <div class="card menu-card">
                 <div class="card-header menu-header d-flex align-items-center" data-bs-toggle="collapse"
                     data-bs-target="#mainMenu" aria-expanded="true">
-                    <i class="fa fa-angle-down me-2"></i> Chức năng
+                    <i class="fa fa-angle-down me-2"></i> Features
                 </div>
                 <ul id="mainMenu" class="collapse show list-group list-group-flush menu-list">
                     <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin/product-adm'" class="menu-link">Sản phẩm <i
+                        <a [routerLink]="'/admin/product-adm'" class="menu-link">Products <i
                                 class="fa fa-edit float-end"></i></a>
                     </li>
                     <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin'" class="menu-link">Danh mục <i class="fa fa-edit float-end"></i></a>
-                    </li>
-                    <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin'" class="menu-link">Liên hệ <i class="fa fa-edit float-end"></i></a>
-                    </li>
-                    <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin/order-adm'" class="menu-link">Đơn hàng <i
+                        <a [routerLink]="'/admin/order-adm'" class="menu-link">Orders <i
                                 class="fa fa-edit float-end"></i></a>
                     </li>
                     <li class="list-group-item menu-item">
                         <a [routerLink]="'/admin'" class="menu-link">Blogs <i class="fa fa-edit float-end"></i></a>
                     </li>
                     <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin'" class="menu-link">Giảm giá <i class="fa fa-edit float-end"></i></a>
+                        <a [routerLink]="'/admin'" class="menu-link">Discounts <i class="fa fa-edit float-end"></i></a>
+                    </li>
+                    <li class="list-group-item menu-item">
+                        <a [routerLink]="'/admin'" class="menu-link">Contact <i class="fa fa-edit float-end"></i></a>
                     </li>
                 </ul>
             </div>

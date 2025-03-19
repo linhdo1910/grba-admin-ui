@@ -9,25 +9,6 @@
     font-size: 14px;
 }
 
-.btn-primary {
-    background-color: #6a1b9a;
-    border-color: #6a1b9a;
-}
-
-.btn-primary:hover {
-    background-color: #4a148c;
-    border-color: #4a148c;
-}
-
-.btn-outline-secondary {
-    color: #6a1b9a;
-    border-color: #6a1b9a;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #6a1b9a;
-    color: #fff;
-}
 
 .table {
     margin-top: 20px;

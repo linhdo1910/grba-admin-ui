@@ -1,12 +1,14 @@
 .sidebar {
     width: 250px;
     height: 100vh;
-    background-color: #1a1e40;
-    padding: 0;
+    background-color: #D9D3C5;
+    top:0;
+    left:0;
+    position: fixed;
 }
 
 .sidebar-logo img {
-    max-width: 80%;
+    max-width: 100%;
     display: block;
     margin: 0 auto;
 }
@@ -14,12 +16,12 @@
 .nav-link {
     font-size: 16px;
     font-weight: 500;
-    color: #ffffff;
+    color: #402A1D;
     text-decoration: none;
 }
 
 .nav-link:hover {
-    color: #adb5bd;
+    color: #DAA86D;
 }
 
 .collapse .nav-link {
@@ -27,7 +29,7 @@
 }
 
 .collapse .nav-link:hover {
-    color: #ced4da;
+    color: #DAA86D;
 }
 
 .nav-item .nav-item {

@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error: () => {
-          this.loginError = 'Email hoặc mật khẩu không chính xác';
+          this.loginError = 'Invalid email or password';
         }
       });
     }

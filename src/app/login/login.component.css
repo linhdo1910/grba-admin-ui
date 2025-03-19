@@ -1,6 +1,6 @@
 .login-container {
-  background-color: rgba(240, 244, 255, 0.8);
-  border-radius: 20px;
+  background-color: #edebe6;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 30px;
   text-align: center;
@@ -31,20 +31,13 @@
   margin-left: 10px;
 }
 
-.btn-dark {
-  background-color: #000;
-  color: #fff;
-  border-radius: 50px;
-  font-size: 0.875rem;
-  transition: background-color 0.3s ease;
+.btn-primary {
+  border-radius: 6px;
 }
 
-.btn-dark:hover {
-  background-color: #333;
-}
 
 .social-buttons button {
-  border-radius: 50px;
+  border-radius: 6px;
   font-size: 0.875rem;
 }
 

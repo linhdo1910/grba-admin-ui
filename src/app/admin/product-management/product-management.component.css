@@ -1,14 +1,12 @@
 .product-management {
     padding: 20px;
-    background-color: #f8f9fa;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .product-management h2 {
     font-size: 24px;
     font-weight: bold;
-    color: #343a40;
+    color: #402A1D;
 }
 
 .product-form {
@@ -20,13 +18,13 @@
 .product-form h4 {
     font-size: 20px;
     font-weight: bold;
-    color: #6c757d;
+    color: #402A1D;
     margin-bottom: 20px;
 }
 
 .product-form .form-label {
     font-weight: 500;
-    color: #495057;
+    color: #402A1D;
 }
 
 .product-form .form-control {
@@ -38,7 +36,7 @@
 }
 
 .product-form .form-control:focus {
-    border-color: #6a1b9a;
+    border-color: #DAA86D;
     box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.25);
 }
 
@@ -49,38 +47,16 @@
     border-radius: 4px;
 }
 
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: #fff;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #004085;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: #fff;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #4e555b;
-}
 
 .btn-purple {
-    background-color: #6a1b9a;
+    background-color:#DAA86D;
     color: white;
     border: none;
     transition: background-color 0.3s ease;
 }
 
 .btn-purple:hover {
-    background-color: #4a148c;
+    background-color: #DAA86D;
     color: white;
 }
 
@@ -93,14 +69,14 @@
 .product-list h4 {
     font-size: 20px;
     font-weight: bold;
-    color: #343a40;
+    color: #402A1D;
     margin-bottom: 20px;
 }
 
 .table {
     width: 100%;
     margin-bottom: 1rem;
-    color: #212529;
+    color: #402A1D;
 }
 
 .table-bordered {
@@ -118,11 +94,13 @@
     font-size: 14px;
     font-weight: 600;
     color: #495057;
+    text-align: center;
 }
 
 .table tbody td {
     font-size: 14px;
     color: #212529;
+    text-align: center;
 }
 
 .table tbody td .btn-sm {
@@ -175,3 +153,5 @@
     margin: 0;
     cursor: pointer;
 }
+
+  

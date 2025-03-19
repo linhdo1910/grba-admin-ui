@@ -1,49 +1,45 @@
 <div class="background"
-    style="background-image: url('../../assets/bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    style="background-image: url('../../assets/.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="login-container col-11 col-md-8 col-lg-5 col-xl-4">
-            <h2 class="text-primary fw-bold mb-3">ĐĂNG NHẬP</h2>
-            <p class="text-muted">Đăng nhập nâng cao trải nghiệm mua sắm cùng với <b>Eyeconic!</b></p>
+        <div class="login-container col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <h2 class="text-secondary fw-bold mb-3">LOGIN</h2>
+            <p class="text-primary">Enhance your shopping experience with <b> The Kanso</b></p>
 
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <div *ngIf="loginError" class="alert alert-danger">{{ loginError }}</div>
 
                 <div class="mb-3">
                     <input type="text" class="form-control" formControlName="email"
-                        placeholder="Nhập tài khoản hoặc email của bạn" required aria-label="Email hoặc Tài khoản"
+                        placeholder="Enter your email or username" required aria-label="Email or Username"
                         autocomplete="email">
                 </div>
 
                 <div class="mb-3">
-                    <input type="password" class="form-control" formControlName="password" placeholder="Nhập mật khẩu"
-                        required aria-label="Mật khẩu" autocomplete="current-password">
+                    <input type="password" class="form-control" formControlName="password" placeholder="Enter password"
+                        required aria-label="Password" autocomplete="current-password">
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <label><input type="checkbox" formControlName="rememberMe"> Ghi nhớ đăng nhập</label>
-                    <a href="#" class="text-primary no-underline">Quên mật khẩu?</a>
+                    <label><input type="checkbox" formControlName="rememberMe"> Remember me</label>
+                    <a href="#" class="text-primary no-underline">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="btn btn-dark btn-sm w-50 rounded-pill mb-3">Đăng nhập</button>
+                <button type="submit" class="btn btn-primary btn-sm w-50 mb-3">Login</button>
             </form>
 
-            <p class="mb-3">Chưa có tài khoản? <a routerLink="/signup" fragment="forms"
-                    class="text-primary no-underline">Đăng ký ngay</a></p>
+            <p class="mb-3">Don't have an account? <a routerLink="/signup" fragment="forms"
+                    class="text-primary no-underline">Sign up now</a></p>
 
-            <div class="separator">Hoặc</div>
+            <div class="separator">Or</div>
 
             <div class="social-buttons">
                 <button
-                    class="btn btn-outline-secondary w-100 mb-2 d-flex align-items-center justify-content-center rounded-pill social-button">
-                    <img src="assets/fb.png" alt="Facebook" class="me-2" width="20" height="20"> Tiếp tục với Facebook
+                    class="btn btn-secondary w-100 mb-2 d-flex align-items-center justify-content-center social-button">
+                    <img src="assets/fb.png" alt="Facebook" class="me-2" width="20" height="20"> Continue with Facebook
                 </button>
                 <button
-                    class="btn btn-outline-secondary w-100 mb-2 d-flex align-items-center justify-content-center rounded-pill social-button">
-                    <img src="assets/google.png" alt="Google" class="me-2" width="20" height="20"> Tiếp tục với Google
-                </button>
-                <button
-                    class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center rounded-pill social-button">
-                    <img src="assets/apple.png" alt="Apple" class="me-2" width="20" height="20"> Tiếp tục với Apple
+                    class="btn btn-secondary w-100 mb-2 d-flex align-items-center justify-content-center social-button">
+                    <img src="assets/google.png" alt="Google" class="me-2" width="20" height="20"> Continue with Google
                 </button>
             </div>
         </div>

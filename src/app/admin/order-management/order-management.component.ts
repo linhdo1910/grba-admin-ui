@@ -23,7 +23,7 @@ export class OrderManagementComponent implements OnInit {
   statusOptions = [
     { value: 'in_progress', label: 'Đang xử lý', icon: 'fas fa-hourglass-half', iconClass: 'text-warning' },
     { value: 'delivered', label: 'Đã giao', icon: 'fas fa-truck', iconClass: 'text-primary' },
-    { value: 'completed', label: 'Hoàn tất', icon: 'fas fa-check-circle', iconClass: 'text-success' }
+    { value: 'completed', label: 'Hoàn tất', icon: 'fas fa-check-circle', iconClass: 'text-success' } //Sua status
   ];
 
   constructor(
