@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAPIService } from '../../user-api.service';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../../interface/User';
+import { User } from '../../interface/User';
 
 @Component({
   selector: 'app-user-management',
@@ -17,33 +17,37 @@ export class UserManagementComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 0;
   roles = ['user', 'admin'];
-  actions = ['just view', 'edit all', 'account ctrl', 'sales ctrl'];
   genders = ['male', 'female'];
+  isAdmin: boolean = false;
   canEdit: boolean = false;
-  canView: boolean = false;
+  actions: string[] = ['edit all', 'account ctrl', 'sales ctrl', 'just view']; // ✅ Khởi tạo biến canEdit
+
 
   constructor(
     private userService: UserAPIService,
     private authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.setPermissions();
-    if (this.canView) {
-      this.loadUsers();
-    }
-  }
-
-  setPermissions(): void {
-    const action = this.authService.getAction();
-    this.canEdit = action === 'edit all' || action === 'account ctrl';
-    this.canView = this.canEdit || action === 'just view';
+    this.authService.getUserProfile().subscribe({
+      next: (user) => {
+        if (user) {
+          this.isAdmin = user.role === 'admin' || user.action === 'account ctrl';
+          this.canEdit = user.role === 'admin' || user.action === 'edit all';
+          if (this.isAdmin) {
+            this.loadUsers();
+          } else {
+            console.warn('You do not have permission to view users.');
+          }
+        }
+      },
+      error: () => {
+        console.warn('Error loading user data.');
+      }
+    });
   }
 
   loadUsers(page: number = 1): void {
-    if (!this.canView) {
-      return;
-    }
     this.userService.getUsers(page, 10, this.searchKeyword).subscribe({
       next: (response) => {
         this.users = response.users;
@@ -61,15 +65,11 @@ export class UserManagementComponent implements OnInit {
   }
 
   startEditing(user: User): void {
-    if (!this.canEdit) {
+    if (!this.isAdmin) {
+      alert('You do not have permission to edit users.');
       return;
     }
     if (!user._id) {
-      return;
-    }
-    const currentUserAction = this.authService.getAction();
-    if (currentUserAction === 'account ctrl' && user.action === 'edit all') {
-      alert('You cannot edit users with the "edit all" action.');
       return;
     }
     this.editingUserId = user._id;
@@ -77,19 +77,21 @@ export class UserManagementComponent implements OnInit {
   }
 
   saveEditing(userId: string | null): void {
-    if (!userId || this.editingUserId !== userId) return;
-
-    const currentUserAction = this.authService.getAction();
-    if (currentUserAction === 'account ctrl' && this.editedUser.action === 'edit all') {
-      alert('You cannot assign the "edit all" action.');
+    if (!this.isAdmin) {
+      alert('You do not have permission to edit users.');
       return;
     }
+    if (!userId || this.editingUserId !== userId) return;
 
-    this.userService.updateUserProfile(userId, this.editedUser).subscribe({
+    const updateData = { ...this.editedUser };
+    delete updateData._id;
+    delete updateData.password; // Không cập nhật password
+
+    this.userService.updateUserProfile(userId, updateData).subscribe({
       next: () => {
         const index = this.users.findIndex(user => user._id === userId);
         if (index !== -1) {
-          this.users[index] = { ...this.users[index], ...this.editedUser };
+          this.users[index] = { ...this.users[index], ...updateData };
         }
         this.cancelEditing();
       },
@@ -105,7 +107,8 @@ export class UserManagementComponent implements OnInit {
   }
 
   onDeleteUser(userId: string | null): void {
-    if (!this.canEdit) {
+    if (!this.isAdmin) {
+      alert('You do not have permission to delete users.');
       return;
     }
     if (!userId) {

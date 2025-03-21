@@ -1,37 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-import { User } from '../interface/User';
+import { catchError } from 'rxjs/operators';
+import { User } from './interface/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAPIService {
-  private apiUrl = 'http://localhost:3002';
-  private token: string | null = null;
+  private apiUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) { }
-
-  setToken(token: string, rememberMe: boolean = false): void {
-    this.token = token;
-    if (rememberMe) {
-      localStorage.setItem('token', token);
-    } else {
-      sessionStorage.setItem('token', token);
-    }
-  }
-
-  getToken(): string | null {
-    if (!this.token) {
-      this.token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    }
-    return this.token;
-  }
+  constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const token = this.getToken();
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
@@ -43,72 +26,57 @@ export class UserAPIService {
   }
 
   registerUser(user: User): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/signup`, user, {
-      headers: this.getHeaders(),
-      withCredentials: true
+    return this.http.post<any>(`${this.apiUrl}/users/signup`, user, {
+      headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }
 
-  loginUser(credentials: { email: string; password: string; rememberMe?: boolean }): Observable<{ userId: string; role: string; token: string; action: string; message: string }> {
-    return this.http.post<{ userId: string; role: string; token: string; action: string; message: string }>(
-      `${this.apiUrl}/login`,
+  loginUser(credentials: { email: string; password: string; rememberMe?: boolean }): Observable<{ user: User; token: string }> {
+    return this.http.post<{ user: User; token: string }>(
+      `${this.apiUrl}/users/login`,
       credentials,
-      {
-        headers: this.getHeaders(),
-        withCredentials: true
-      }
-    ).pipe(
-      tap(response => {
-        this.setToken(response.token, credentials.rememberMe || false);
-      }),
-      catchError(this.handleError)
-    );
+      { headers: this.getHeaders() }
+    ).pipe(catchError(this.handleError));
   }
 
   logoutUser(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/logout`, {
-      headers: this.getHeaders(),
-      withCredentials: true
+    return this.http.get<any>(`${this.apiUrl}/users/logout`, {
+      headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }
 
-  getUserDetails(): Observable<Partial<User>> {
-    return this.http.get<Partial<User>>(`${this.apiUrl}/profile`, {
-      headers: this.getHeaders(),
-      withCredentials: true
+  getUserDetails(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/users/profile`, {
+      headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }
 
   getUsers(page: number = 1, limit: number = 10, search: string = ''): Observable<{ users: User[]; total: number; pages: number }> {
-    const params: any = { page: page.toString(), limit: limit.toString() };
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
     if (search) {
-      params.search = search;
+      params = params.set('search', search);
     }
 
-    return this.http.get<{ users: User[]; total: number; pages: number }>(`${this.apiUrl}/user-management`, {
+    return this.http.get<{ users: User[]; total: number; pages: number }>(`${this.apiUrl}/users`, {
       headers: this.getHeaders(),
-      params,
-      withCredentials: true
+      params
     }).pipe(catchError(this.handleError));
   }
 
   updateUserProfile(userId: string, userData: Partial<User>): Observable<any> {
     if ('_id' in userData) delete userData._id;
-    if ('email' in userData) delete userData.email;
-    if ('password' in userData) delete userData.password;
 
-    return this.http.patch<any>(`${this.apiUrl}/update/${userId}`, userData, {
-      headers: this.getHeaders(),
-      withCredentials: true
-    }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.patch<any>(`${this.apiUrl}/users/${userId}`, userData, {
+      headers: this.getHeaders()
+    }).pipe(catchError(this.handleError));
   }
 
   deleteUserAccount(userId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/delete/${userId}`, {
-      headers: this.getHeaders(),
-      withCredentials: true
+    return this.http.delete<any>(`${this.apiUrl}/users/${userId}`, {
+      headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }
 }

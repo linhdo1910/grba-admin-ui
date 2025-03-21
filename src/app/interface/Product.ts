@@ -1,32 +1,25 @@
-export class Product {
-  constructor(
-    public _id: string,
-    public product_name: string = "",
-    public product_detail: string = "",
-    public stocked_quantity: number = 0,
-    public unit_price: number = 0,
-    public discount: number = 0,
-    public createdAt: string = "",
-    public image_1: string = "",
-    public image_2: string = "",
-    public image_3: string = "",
-    public image_4: string = "",
-    public image_5: string = "",
-    public product_dept: string = "",
-    public rating: number = 4,
-    public isNew: boolean = false
-  ) { }
-
-  getDiscountedPrice(): number {
-    return this.unit_price * (1 - this.discount);
-  }
-
-  checkIfNew(days: number = 30): boolean {
-    const createdDate = new Date(this.createdAt);
-    const currentDate = new Date();
-    const timeDiff = Math.abs(currentDate.getTime() - createdDate.getTime());
-    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    this.isNew = diffDays <= days;
-    return this.isNew;
-  }
+// product.interface.ts
+export interface Product {
+  _id?: string; // ID từ MongoDB, optional vì khi tạo mới không có
+  productName: string;
+  brandName?: string;
+  productPrice: number;
+  productDescription?: string;
+  productStock: number;
+  productCategory?: string;
+  productSubCategory?: string;
+  coverImage?: string;
+  images?: string[]; // Mảng các chuỗi base64 hoặc URL
+  color?: string;
+  size?: string;
+  materials?: string;
+  sort?: string;
+  note?: string;
+  status: number;
+  rating?: number;
+  reviews?: number;
+  discount?: number;
+  previousPrice?: number;
+  createdAt?: string; // Từ timestamps
+  updatedAt?: string; // Từ timestamps
 }

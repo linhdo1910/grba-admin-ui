@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { CartAPIService } from '../cart-api.service';
-import { CartItem } from '../../interface/Cart';
+import { CartItem } from '../interface/Cart';
 import { AuthService } from './auth.service';
 import { tap, catchError } from 'rxjs/operators';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';

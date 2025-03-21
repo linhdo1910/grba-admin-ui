@@ -1,113 +1,123 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
-import { UserAPIService } from '../user-api.service';
-import { map, tap, catchError } from 'rxjs/operators';
-import { CartService } from './cart.service';
-import { CartAPIService } from '../cart-api.service';
+import { BehaviorSubject, Observable, throwError, Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { tap, catchError } from 'rxjs/operators';
+import { LoginResponse, User } from '../interface/User';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private baseUrl = 'http://localhost:3000';
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$: Observable<boolean> = this.loggedIn.asObservable();
   private logoutEvent = new Subject<void>();
   logoutEvent$ = this.logoutEvent.asObservable();
-  private cartService: CartService | null = null;
 
   constructor(
-    private userAPIService: UserAPIService,
+    private http: HttpClient,
     private injector: Injector,
-    private cartAPIService: CartAPIService
+    private router: Router
   ) {
     this.initializeLoginStatus();
-  }
-
-  private getCartService(): CartService {
-    if (!this.cartService) {
-      this.cartService = this.injector.get(CartService);
-    }
-    return this.cartService;
   }
 
   private initializeLoginStatus(): void {
     const token = this.getToken();
     if (token) {
       this.loggedIn.next(true);
-      this.cartAPIService.setToken(token);
+      console.log('User is already logged in');
     } else {
-      console.warn('No token found during initialization.');
+      console.log('No valid session found. User must log in.');
+      this.loggedIn.next(false);
     }
   }
-
-  private storeSessionData(userId: string, role: string, rememberMe: boolean, token: string, action?: string): void {
+  
+  private storeSessionData(response: LoginResponse, rememberMe: boolean): void {
+    if (!response || !response.userId) {
+      console.warn('Invalid login response: Missing userId.');
+      return;
+    }
+  
+    if (!response.token) {
+      console.warn('Warning: No token received. User might not be authenticated.');
+      return;
+    }
+  
     const storage = rememberMe ? localStorage : sessionStorage;
     storage.setItem('isLoggedIn', 'true');
-    storage.setItem('userId', userId);
-    storage.setItem('role', role);
-    storage.setItem('token', token);
-    if (action) {
-      storage.setItem('action', action);
-    }
+    storage.setItem('userId', response.userId);
+    storage.setItem('role', response.role);
+    storage.setItem('action', response.action ?? 'just view');
+    storage.setItem('token', response.token); // Chỉ lưu nếu có token
+  
+    console.log('Session data stored successfully');
   }
-
+  
   private clearSessionData(): void {
-    ['isLoggedIn', 'userId', 'role', 'token', 'action'].forEach(key => {
+    ['isLoggedIn', 'userId', 'profileName', 'role', 'action', 'token'].forEach(key => {
       localStorage.removeItem(key);
       sessionStorage.removeItem(key);
     });
   }
 
-  getAction(): string | null {
-    return localStorage.getItem('action') || sessionStorage.getItem('action') || 'just view';
+  login(email: string, password: string, rememberMe: boolean): Observable<LoginResponse> {
+    const body = { email, password };
+    return this.http.post<LoginResponse>(`${this.baseUrl}/api/users/login`, body, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      tap(response => {
+        console.log('Login API response:', response);
+        if (!response || !response.userId || !response.token) {
+          throw new Error('Invalid login response: Missing required fields');
+        }
+        this.storeSessionData(response, rememberMe);
+        this.loggedIn.next(true);
+        console.log('Logged in status updated to true');
+        console.log('Role stored:', response.role);
+        if (this.isAdmin()) {
+          console.log('User is admin, navigating to /admin/mainpage');
+          this.router.navigate(['/admin/mainpage']);
+        } else {
+          console.log('User is not admin, navigating to /user/mainpage');
+          this.router.navigate(['/login']);
+        }
+      }),
+      catchError((error) => {
+        console.error('Login error:', error);
+        return throwError(() => new Error(error?.error?.message || 'Login failed'));
+      })
+    );
   }
+  
+  
 
-  login(email: string, password: string, rememberMe: boolean, userId?: string, role?: string, token?: string): void {
-    if (userId && role && token) {
-      this.storeSessionData(userId, role, rememberMe, token);
-      this.loggedIn.next(true);
-      this.cartAPIService.setToken(token, rememberMe);
-    } else {
-      this.userAPIService.loginUser({ email, password, rememberMe }).pipe(
-        tap(response => {
-          const { userId, role, token, action } = response;
-          this.storeSessionData(userId, role, rememberMe, token, action);
-          this.loggedIn.next(true);
-          this.cartAPIService.setToken(token, rememberMe);
-        }),
-        catchError((error) => {
-          this.loggedIn.next(false);
-          return throwError(() => new Error('Login failed'));
-        })
-      ).subscribe();
-    }
-  }
-
-  logout(): void {
-    this.userAPIService.logoutUser().pipe(
+  logout(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/users/logout`, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }).pipe(
       tap(() => {
         this.clearSessionData();
-        this.getCartService().clearCart();
         this.loggedIn.next(false);
-        this.cartAPIService.setToken('');
         this.logoutEvent.next();
       }),
       catchError((error) => {
-        return throwError(() => new Error('Logout failed'));
+        return throwError(() => new Error(error.error.message || 'Logout failed'));
       })
-    ).subscribe();
+    );
   }
 
   isLoggedIn(): boolean {
-    return this.loggedIn.value;
+    const token = this.getToken();
+    console.log('Checking isLoggedIn. Token:', token, 'LoggedIn value:', this.loggedIn.value);
+    return this.loggedIn.value && !!token; // Yêu cầu cả token và loggedIn
   }
 
   isAdmin(): boolean {
     const role = localStorage.getItem('role') || sessionStorage.getItem('role');
-    const action = localStorage.getItem('action') || sessionStorage.getItem('action') || 'just view';
-    const validActions = ['edit all', 'just view', 'sales ctrl', 'account ctrl'];
-
-    return role === 'admin' && validActions.includes(action || '');
+    console.log('Checking isAdmin. Role:', role);
+    return role === 'admin';
   }
 
   getToken(): string | null {
@@ -118,22 +128,25 @@ export class AuthService {
     return localStorage.getItem('userId') || sessionStorage.getItem('userId');
   }
 
-  getLikedProducts(): string[] {
-    const userId = this.getUserId();
-    if (!userId) return [];
-    const likedProducts = localStorage.getItem(`likedProducts_${userId}`);
-    return likedProducts ? JSON.parse(likedProducts) : [];
-  }
-
-  saveLikedProducts(likedProducts: string[]): void {
-    const userId = this.getUserId();
-    if (!userId) return;
-    localStorage.setItem(`likedProducts_${userId}`, JSON.stringify(likedProducts));
-  }
-
-  getUserEmail(): Observable<string | null> {
-    return this.userAPIService.getUserDetails().pipe(
-      map(profile => profile?.email ?? null)
+  getUserProfile(): Observable<User | null> {
+    const token = this.getToken();
+    console.log('Fetching user profile with token:', token);
+    return this.http.get<User>(`${this.baseUrl}/api/users/profile`, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
+    }).pipe(
+      tap(user => {
+        console.log('User profile fetched:', user);
+        localStorage.setItem("profileName", user.name);
+        localStorage.setItem("action", user.action ?? 'just view');
+      }),
+      catchError((error) => {
+        console.error('Error fetching user profile:', error);
+        return throwError(() => new Error(error.error.message || 'Failed to get user profile'));
+      })
     );
+  }
+
+  getAction(): string | null {
+    return localStorage.getItem('action') || sessionStorage.getItem('action');
   }
 }

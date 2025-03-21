@@ -4,9 +4,10 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-const routes: Routes = [
-  { path: 'login', component: LoginComponent },
 
+const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Route mặc định
+  { path: 'login', component: LoginComponent },
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),

@@ -8,20 +8,21 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
-  standalone: false
+  standalone:false
 })
 export class AdminComponent implements OnInit, OnDestroy {
   pageTitle = 'Homepage';
   profileName = 'Admin User';
   userRole = '';
-  userAction = '';
+  userAction: string = '';
+  userName='';
   private subscription: Subscription | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -35,14 +36,16 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   private loadUserProfile(): void {
-    this.subscription = this.authService.getUserEmail().subscribe({
-      next: (email) => {
-        this.profileName = email || 'Admin User';
-        this.userRole = this.authService.isAdmin() ? 'admin' : 'user';
-        this.userAction = this.authService.getAction() || 'just view';
+    this.subscription = this.authService.getUserProfile().subscribe({
+      next: (user) => {
+        if (user) { // Kiểm tra user có giá trị không
+          this.userName = user.name || ''; // Kiểm tra thuộc tính profileName
+          this.userRole = user.role || 'unknown'; // Đảm bảo userRole có giá trị mặc định
+          this.userAction = user.action || 'unknown'; // Đảm bảo userAction có giá trị mặc định
+        }
       },
       error: () => {
-        this.profileName = 'Admin User';
+        this.userName = '';
         this.userRole = 'unknown';
         this.userAction = 'unknown';
       }
@@ -65,8 +68,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       });
   }
 
-  canAccessFeature(requiredAction: string): boolean {
-    return this.userRole === 'admin' && (this.userAction === requiredAction || this.userAction === 'edit all');
+  canAccessFeature(): boolean {
+    return this.userRole === 'admin';
   }
 
   confirmLogout(): void {
@@ -76,11 +79,18 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.authService.logoutEvent$.subscribe(() => {
-      this.router.navigate(['/']).then(() => {
-        window.location.reload();
-      });
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']).then(() => {
+          window.location.reload();
+        });
+      },
+      error: (error) => {
+        console.error('Logout failed:', error);
+        this.router.navigate(['/login']).then(() => {
+          window.location.reload();
+        });
+      }
     });
   }
 }

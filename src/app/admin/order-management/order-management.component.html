@@ -5,8 +5,8 @@
         <button class="btn btn-primary" (click)="createOrder()" *ngIf="canEdit">+ Create Order</button>
         <div class="d-flex align-items-center">
             <select class="form-select me-2" [(ngModel)]="filterOption">
-                <option value="orderId">Order ID</option>
-                <option value="user">User</option>
+                <option value="_id">Order ID</option> <!-- Thay 'orderId' bằng '_id' -->
+                <option value="userName">User</option> <!-- Thay 'user' bằng 'userName' -->
             </select>
             <input type="text" class="form-control me-2" placeholder="Search" [(ngModel)]="searchQuery">
             <select class="form-select me-2" [(ngModel)]="statusFilter">
@@ -31,13 +31,13 @@
         </thead>
         <tbody>
             <tr *ngFor="let order of orders">
-                <td>{{ order._id || 'N/A' }}</td>
-                <td>{{ order.userName || 'Anonymous' }}</td>
-                <td>{{ order.totalPrice | currency }}</td>
+                <td>{{ order._id || 'N/A' }}</td> <!-- Giữ nguyên vì đã khớp -->
+                <td>{{ order.userName || 'Anonymous' }}</td> <!-- Giữ nguyên vì đã khớp -->
+                <td>{{ order.totalPrice | currency }}</td> <!-- Giữ nguyên vì đã khớp -->
                 <td>
                     <input type="checkbox" class="form-check-input" [checked]="isPaid(order)" disabled>
                 </td>
-                <td>{{ order.createdAt | date: 'dd/MM/yyyy hh:mm a' }}</td>
+                <td>{{ order.orderDate | date: 'dd/MM/yyyy hh:mm a' }}</td> <!-- Thay 'createdAt' bằng 'orderDate' -->
                 <td>
                     <div class="d-flex align-items-center">
                         <i [class]="getStatusIcon(order.status)" [ngClass]="getStatusClass(order.status)"></i>

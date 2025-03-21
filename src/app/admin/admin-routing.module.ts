@@ -15,8 +15,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'mainpage', pathMatch: 'full' },
       { path: 'mainpage', component: MainpageComponent, data: { title: 'Trang chủ' } },
-      { path: 'product-adm', component: ProductManagementComponent, data: { title: 'Chức năng/Sản phẩm' } },
-      { path: 'order-adm', component: OrderManagementComponent, data: { title: 'Chức năng/Đơn hàng' } },
+      { path: 'product-adm', component: ProductManagementComponent, data: { title: 'Product Management' } },
+      { path: 'order-adm', component: OrderManagementComponent, data: { title: 'Order Management' } },
       {
         path: 'user-adm',
         component: UserManagementComponent,

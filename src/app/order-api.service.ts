@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Order } from '../interface/Order';
+import { Order, OrderStatus, PaymentMethod } from './interface/Order'; // Import interface mới
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderAPIService {
-  private apiUrl = '/orders';
-  private productStockUrl = '/products';
+  private apiUrl = 'http://localhost:3000/api/orders';
+  private productStockUrl = 'http://localhost:3000/api/products';
   private token: string | null = null;
 
   constructor(private http: HttpClient) { }
@@ -64,6 +64,12 @@ export class OrderAPIService {
         map(data => {
           data.orders.forEach(order => {
             order.userName = order.userName || 'Anonymous';
+            order.orderDate = new Date(order.orderDate); // Chuyển đổi orderDate thành Date
+            order.createdAt = new Date(order.createdAt); // Chuyển đổi createdAt thành Date
+            order.updatedAt = new Date(order.updatedAt); // Chuyển đổi updatedAt thành Date
+            order.transactionHistory.forEach(transaction => {
+              transaction.timestamp = new Date(transaction.timestamp); // Chuyển đổi timestamp
+            });
           });
           return data;
         }),
@@ -72,34 +78,37 @@ export class OrderAPIService {
   }
 
   placeOrder(orderData: {
-    selectedItems: { _id: string; quantity: number; unit_price: number }[];
+    products: { productId: string; quantity: number; price: number; productName: string; productImage?: string }[];
     totalPrice: number;
-    paymentMethod: string;
-    shippingAddress: {
-      firstName: string;
-      lastName: string;
-      company?: string;
-      address: string;
-      province: string;
+    paymentMethod: PaymentMethod;
+    shipTo: {
+      fullName: string;
+      city: string;
       district: string;
       ward: string;
+      address: string;
       email: string;
       phone: string;
-      additionalNotes?: string;
+      note?: string;
     };
+    shippingFee: number;
+    subTotal: number;
+    discountPrice: number;
+    staffNote?: string;
   }): Observable<{ orderId: string; message: string }> {
-    if (!Array.isArray(orderData.selectedItems) || orderData.selectedItems.length === 0) {
-      return throwError(() => new Error('selectedItems must be a non-empty array.'));
+    if (!Array.isArray(orderData.products) || orderData.products.length === 0) {
+      return throwError(() => new Error('products must be a non-empty array.'));
     }
-    for (const item of orderData.selectedItems) {
+    for (const item of orderData.products) {
       if (
-        !item._id ||
+        !item.productId ||
         typeof item.quantity !== 'number' ||
         item.quantity <= 0 ||
-        typeof item.unit_price !== 'number' ||
-        item.unit_price < 0
+        typeof item.price !== 'number' ||
+        item.price < 0 ||
+        !item.productName
       ) {
-        return throwError(() => new Error('Invalid format in selectedItems.'));
+        return throwError(() => new Error('Invalid format in products.'));
       }
     }
 
@@ -107,21 +116,42 @@ export class OrderAPIService {
       return throwError(() => new Error('Invalid totalPrice.'));
     }
 
-    if (!orderData.paymentMethod || typeof orderData.paymentMethod !== 'string') {
+    if (!orderData.paymentMethod || !['COD', 'Banking', 'Momo', 'ZaloPay'].includes(orderData.paymentMethod)) {
       return throwError(() => new Error('Invalid paymentMethod.'));
     }
 
-    const address = orderData.shippingAddress;
+    const shipTo = orderData.shipTo;
     if (
-      !address.firstName ||
-      !address.lastName ||
-      !address.address ||
-      typeof address.firstName !== 'string' ||
-      typeof address.lastName !== 'string' ||
-      typeof address.address !== 'string'
+      !shipTo.fullName ||
+      !shipTo.city ||
+      !shipTo.district ||
+      !shipTo.ward ||
+      !shipTo.address ||
+      !shipTo.email ||
+      !shipTo.phone ||
+      typeof shipTo.fullName !== 'string' ||
+      typeof shipTo.city !== 'string' ||
+      typeof shipTo.district !== 'string' ||
+      typeof shipTo.ward !== 'string' ||
+      typeof shipTo.address !== 'string' ||
+      typeof shipTo.email !== 'string' ||
+      typeof shipTo.phone !== 'string'
     ) {
-      return throwError(() => new Error('Invalid shippingAddress.'));
+      return throwError(() => new Error('Invalid shipTo.'));
     }
+
+    if (typeof orderData.shippingFee !== 'number' || orderData.shippingFee < 0) {
+      return throwError(() => new Error('Invalid shippingFee.'));
+    }
+
+    if (typeof orderData.subTotal !== 'number' || orderData.subTotal < 0) {
+      return throwError(() => new Error('Invalid subTotal.'));
+    }
+
+    if (typeof orderData.discountPrice !== 'number' || orderData.discountPrice < 0) {
+      return throwError(() => new Error('Invalid discountPrice.'));
+    }
+
     return this.http
       .post<{ orderId: string; message: string }>(this.apiUrl, orderData, {
         headers: this.getHeaders(),
@@ -130,12 +160,12 @@ export class OrderAPIService {
       .pipe(catchError(this.handleError));
   }
 
-  updateOrderStatus(orderId: string, status: string): Observable<{ message: string }> {
+  updateOrderStatus(orderId: string, status: OrderStatus): Observable<{ message: string }> {
     if (!orderId || typeof orderId !== 'string') {
       return throwError(() => new Error('Invalid orderId.'));
     }
 
-    if (!status || typeof status !== 'string') {
+    if (!status || !['Pending', 'Processing', 'Delivering', 'Finished', 'Cancelled'].includes(status)) {
       return throwError(() => new Error('Invalid status.'));
     }
     return this.http
@@ -147,6 +177,9 @@ export class OrderAPIService {
   }
 
   cancelOrder(orderId: string): Observable<{ message: string }> {
+    if (!orderId || typeof orderId !== 'string') {
+      return throwError(() => new Error('Invalid orderId.'));
+    }
     return this.http
       .delete<{ message: string }>(`${this.apiUrl}/${orderId}`, {
         headers: this.getHeaders(),
@@ -156,12 +189,29 @@ export class OrderAPIService {
   }
 
   getOrderHistory(userId: string): Observable<Order[]> {
+    if (!userId || typeof userId !== 'string') {
+      return throwError(() => new Error('Invalid userId.'));
+    }
     return this.http
       .get<Order[]>(`${this.apiUrl}/history/${userId}`, {
         headers: this.getHeaders(),
         withCredentials: true
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        map(orders => {
+          return orders.map(order => ({
+            ...order,
+            orderDate: new Date(order.orderDate),
+            createdAt: new Date(order.createdAt),
+            updatedAt: new Date(order.updatedAt),
+            transactionHistory: order.transactionHistory.map(transaction => ({
+              ...transaction,
+              timestamp: new Date(transaction.timestamp)
+            }))
+          }));
+        }),
+        catchError(this.handleError)
+      );
   }
 
   updateProductStock(productId: string, quantity: number): Observable<any> {
@@ -181,6 +231,9 @@ export class OrderAPIService {
   }
 
   downloadInvoice(orderId: string): Observable<Blob> {
+    if (!orderId || typeof orderId !== 'string') {
+      return throwError(() => new Error('Invalid orderId.'));
+    }
     return this.http
       .get(`${this.apiUrl}/${orderId}/invoice`, {
         headers: this.getHeaders(),

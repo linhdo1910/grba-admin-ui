@@ -40,6 +40,10 @@ import { UserManagementComponent } from './user-management/user-management.compo
     ProductAPIService,
     OrderAPIService,
   ],
-  bootstrap: [AdminComponent]
+  bootstrap: [AdminComponent],
+  exports: [
+    AdminComponent,
+    NavComponent // ✅ Xuất ra để module khác có thể sử dụng
+  ]
 })
 export class AdminModule { }

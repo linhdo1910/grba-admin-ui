@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-mainpage',
   templateUrl: './mainpage.component.html',
   styleUrls: ['./mainpage.component.css'],
-  standalone: false
+  standalone:false
 })
 export class MainpageComponent implements OnInit, OnDestroy {
   profileName: string = 'Admin';
@@ -17,31 +17,23 @@ export class MainpageComponent implements OnInit, OnDestroy {
     { category: 'Features', item: 'Homepage', name: 'The Kanso...', action: 'edit' },
     { category: 'Features', item: 'Policies', name: 'Polices', action: 'view' },
     { category: 'Features', item: 'Products', name: 'Customize', action: 'edit' },
-    { category: 'Features', item: 'Contact', name: 'Contact', action: 'view' },
+    { category: 'Features', item: 'Contact', name: 'Contact', action: 'view' }
   ];
   private subscription: Subscription | null = null;
-  
-  private filterRecentActivities(): void {
-    const action = this.authService.getAction() || 'just view';
-    if (action !== 'edit all') {
-      this.recentActivities = this.recentActivities.filter(
-        activity => activity.action === action || activity.action === 'view'
-      );
-    }
-  }
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.subscription = this.authService.getUserEmail().subscribe({
-      next: (email) => {
-        this.profileName = email || 'Admin';
+    this.subscription = this.authService.getUserProfile().subscribe({
+      next: (user) => {
+        if (user) {
+          this.profileName = user.name || 'Admin';
+        }
       },
       error: () => {
         this.profileName = 'Admin';
       }
     });
-    this.filterRecentActivities();
   }
 
   ngOnDestroy(): void {

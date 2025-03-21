@@ -1,110 +1,64 @@
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="input-group w-50">
-            <input type="text" class="form-control" placeholder="Search users..." [(ngModel)]="searchKeyword"
-                (keyup.enter)="onSearch()" />
-            <button class="btn btn-secondary" (click)="onSearch()">Search</button>
-        </div>
-        <button class="btn btn-primary" *ngIf="canEdit">+ Add User</button>
+<div *ngIf="isAdmin; else noAccess">
+    <h2>User Management</h2>
+  
+    <!-- Tìm kiếm -->
+    <input type="text" [(ngModel)]="searchKeyword" placeholder="Search users..." />
+    <button (click)="onSearch()">Search</button>
+  
+    <!-- Bảng danh sách người dùng -->
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Gender</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.gender || 'Unknown' }}</td>
+          <td>
+            <button *ngIf="isAdmin" (click)="startEditing(user)">Edit</button>
+            <button *ngIf="isAdmin" (click)="onDeleteUser(user._id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Chỉnh sửa user -->
+    <div *ngIf="editingUserId">
+      <h3>Edit User</h3>
+      <label>Name: <input type="text" [(ngModel)]="editedUser.name" /></label>
+      <label>Email: <input type="text" [(ngModel)]="editedUser.email" disabled /></label>
+      <label>Role:
+        <select [(ngModel)]="editedUser.role">
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+      </label>
+      <label>Gender:
+        <select [(ngModel)]="editedUser.gender">
+          <option *ngFor="let gender of genders" [value]="gender">{{ gender }}</option>
+        </select>
+      </label>
+      <button (click)="saveEditing(editingUserId)">Save</button>
+      <button (click)="cancelEditing()">Cancel</button>
     </div>
-
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Username</th>
-                    <th>Gender</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Role</th>
-                    <th>Action</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of users; let i = index">
-                    <td>{{ (currentPage - 1) * 10 + i + 1 }}</td>
-                    <td>
-                        <ng-container *ngIf="editingUserId === user._id; else displayName">
-                            <input type="text" class="form-control" [(ngModel)]="editedUser.profileName" />
-                        </ng-container>
-                        <ng-template #displayName>{{ user.profileName }}</ng-template>
-                    </td>
-                    <td>
-                        <ng-container *ngIf="editingUserId === user._id; else displayGender">
-                            <select class="form-select" [(ngModel)]="editedUser.gender">
-                                <option *ngFor="let gender of genders" [value]="gender">{{ gender }}</option>
-                            </select>
-                        </ng-container>
-                        <ng-template #displayGender>{{ user.gender || '-' }}</ng-template>
-                    </td>
-                    <td>
-                        <ng-container *ngIf="editingUserId === user._id; else displayPhone">
-                            <input type="text" class="form-control" [(ngModel)]="editedUser.phone" />
-                        </ng-container>
-                        <ng-template #displayPhone>{{ user.phone || '-' }}</ng-template>
-                    </td>
-                    <td>
-                        <ng-container *ngIf="editingUserId === user._id; else displayAddress">
-                            <input type="text" class="form-control" [(ngModel)]="editedUser.address" />
-                        </ng-container>
-                        <ng-template #displayAddress>{{ user.address || '-' }}</ng-template>
-                    </td>
-                    <td>
-                        <ng-container *ngIf="editingUserId === user._id; else displayRole">
-                            <select class="form-select" [(ngModel)]="editedUser.role">
-                                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-                            </select>
-                        </ng-container>
-                        <ng-template #displayRole>{{ user.role }}</ng-template>
-                    </td>
-                    <td>
-                        <ng-container *ngIf="editingUserId === user._id; else displayAction">
-                            <select class="form-select" [(ngModel)]="editedUser.action">
-                                <option *ngFor="let action of actions" [value]="action">{{ action }}</option>
-                            </select>
-                        </ng-container>
-                        <ng-template #displayAction>{{ user.action }}</ng-template>
-                    </td>
-                    <td>
-                        <ng-container *ngIf="editingUserId === user._id; else displayButtons">
-                            <button class="btn btn-sm btn-success me-1" (click)="saveEditing(user._id!)">
-                                Save
-                            </button>
-                            <button class="btn btn-sm btn-secondary" (click)="cancelEditing()">
-                                Cancel
-                            </button>
-                        </ng-container>
-                        <ng-template #displayButtons>
-                            <button class="btn btn-sm btn-warning me-1" *ngIf="canEdit" (click)="startEditing(user)">
-                                Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger" *ngIf="canEdit" (click)="onDeleteUser(user._id!)">
-                                Delete
-                            </button>
-                        </ng-template>
-                    </td>
-                </tr>
-                <tr *ngIf="users.length === 0">
-                    <td colspan="8" class="text-center">No users found.</td>
-                </tr>
-            </tbody>
-        </table>
+  
+    <!-- Điều hướng trang -->
+    <div>
+      <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
     </div>
-
-    <nav *ngIf="totalPages > 1" aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" [class.disabled]="currentPage === 1">
-                <button class="page-link" (click)="onPageChange(currentPage - 1)">Previous</button>
-            </li>
-            <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-                [class.active]="i + 1 === currentPage">
-                <button class="page-link" (click)="onPageChange(i + 1)">{{ i + 1 }}</button>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage === totalPages">
-                <button class="page-link" (click)="onPageChange(currentPage + 1)">Next</button>
-            </li>
-        </ul>
-    </nav>
-</div>
+  </div>
+  
+  <!-- Nếu không phải admin -->
+  <ng-template #noAccess>
+    <p>You do not have permission to view this page.</p>
+  </ng-template>
+  

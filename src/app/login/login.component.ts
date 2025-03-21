@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserAPIService } from '../user-api.service';
 import { AuthService } from '../services/auth.service';
-import { ReactiveFormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
+import { LoginResponse } from '../interface/User';
 
 @Component({
   selector: 'app-login',
@@ -12,45 +10,47 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./login.component.css'],
   standalone: false
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm: FormGroup;
   loginError: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private userAPIService: UserAPIService,
     private authService: AuthService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
     });
   }
 
-  ngOnInit(): void {
-    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this.router.navigate(['/admin']);
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      this.loginError = 'Please fill in all required fields correctly.';
+      return;
+    }
+
+    const { email, password, rememberMe } = this.loginForm.value;
+
+    this.authService.login(email, password, rememberMe).subscribe({
+      next: (response: LoginResponse) => {
+        this.loginError = null;
+        if (response.role === 'admin') {
+          this.router.navigate(['/admin/mainpage']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+      error: (error: any) => { // Thêm type any hoặc Error cho error
+        console.error('Login failed:', error);
+        this.loginError = error.message || 'An unknown error occurred';
       }
     });
   }
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      const { email, password, rememberMe } = this.loginForm.value;
-
-      this.userAPIService.loginUser({ email, password, rememberMe }).subscribe({
-        next: (response) => {
-          const { userId, role, token } = response;
-          this.authService.login(email, password, rememberMe, userId, role, token);
-          this.router.navigate(['/']);
-        },
-        error: () => {
-          this.loginError = 'Invalid email or password';
-        }
-      });
-    }
+  showSignupNotAvailable() {
+    this.loginError = 'Sign up feature is not available yet.';
   }
 }

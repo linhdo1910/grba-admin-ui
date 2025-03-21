@@ -1,13 +1,13 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { Product } from '../interface/Product';
+import { Product } from './interface/Product';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductAPIService {
-  private apiUrl = '/products';
+  private apiUrl = 'http://localhost:3000/api/products';
   private token: string | null = null;
 
   constructor(private _http: HttpClient) {
@@ -106,13 +106,13 @@ export class ProductAPIService {
   }
 
   createProduct(product: Partial<Product>): Observable<Product> {
-    if (!product.product_name || typeof product.product_name !== 'string') {
+    if (!product.productName || typeof product.productName !== 'string') {
       return throwError(() => new Error('product_name is required and must be a string.'));
     }
-    if (typeof product.unit_price !== 'number' || product.unit_price < 0) {
+    if (typeof product.productPrice !== 'number' || product.productPrice < 0) {
       return throwError(() => new Error('unit_price must be a non-negative number.'));
     }
-    if (typeof product.stocked_quantity !== 'number' || product.stocked_quantity < 0) {
+    if (typeof product.productStock !== 'number' || product.productStock < 0) {
       return throwError(() => new Error('stocked_quantity must be a non-negative number.'));
     }
     if (product.discount !== undefined && (product.discount < 0 || product.discount > 1)) {
@@ -121,6 +121,7 @@ export class ProductAPIService {
     if (product.rating !== undefined && (product.rating < 0 || product.rating > 5)) {
       return throwError(() => new Error('rating must be between 0 and 5.'));
     }
+
 
     const sanitizedProduct: Record<string, any> = { ...product };
 
@@ -133,20 +134,20 @@ export class ProductAPIService {
 
   updateProduct(id: string, product: Partial<Product>): Observable<any> {
     if (
-      product.product_name !== undefined &&
-      (typeof product.product_name !== 'string' || !product.product_name.trim())
+      product.productName !== undefined &&
+      (typeof product.productName !== 'string' || !product.productName.trim())
     ) {
       return throwError(() => new Error('product_name must be a non-empty string.'));
     }
     if (
-      product.unit_price !== undefined &&
-      (typeof product.unit_price !== 'number' || product.unit_price < 0)
+      product.productPrice !== undefined &&
+      (typeof product.productPrice !== 'number' || product.productPrice < 0)
     ) {
       return throwError(() => new Error('unit_price must be a non-negative number.'));
     }
     if (
-      product.stocked_quantity !== undefined &&
-      (typeof product.stocked_quantity !== 'number' || product.stocked_quantity < 0)
+      product.productStock !== undefined &&
+      (typeof product.productStock !== 'number' || product.productStock < 0)
     ) {
       return throwError(() => new Error('stocked_quantity must be a non-negative number.'));
     }
@@ -162,6 +163,7 @@ export class ProductAPIService {
     ) {
       return throwError(() => new Error('rating must be between 0 and 5.'));
     }
+
 
     const sanitizedProduct: Record<string, any> = { ...product };
 

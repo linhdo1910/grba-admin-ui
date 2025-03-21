@@ -1,40 +1,36 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptor } from './services/auth.interceptor';
-import { AuthGuard } from './guards/auth.guard';
-
+import { AdminRoutingModule } from './admin/admin-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-
-
+import { AdminComponent } from './admin/admin/admin.component';
+import { MainpageComponent } from './admin/mainpage/mainpage.component';
+import { NavComponent } from './admin/nav/nav.component';
+import { OrderManagementComponent } from './admin/order-management/order-management.component';
+import { ProductManagementComponent } from './admin/product-management/product-management.component';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { AdminModule } from './admin/admin.module';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
     HttpClientModule,
-    
+    ReactiveFormsModule,
+    AppRoutingModule,
+    AdminRoutingModule,
+    AdminModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
-    AuthGuard
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
