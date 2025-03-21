@@ -14,10 +14,12 @@ import { ProductManagementComponent } from './admin/product-management/product-m
 import { UserManagementComponent } from './admin/user-management/user-management.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { AdminModule } from './admin/admin.module';
+import { SignUpComponent } from './sign-up/sign-up.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    SignUpComponent,
     
   ],
   imports: [

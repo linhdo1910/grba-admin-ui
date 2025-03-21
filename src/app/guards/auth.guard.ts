@@ -1,43 +1,25 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
-    return this.authService.isLoggedIn$.pipe(
-      take(1),
-      map((isLoggedIn: boolean) => {
-        const requiresAdmin = route.data['requiresAdmin'] || false;
-        const requiredActions: string[] = route.data['requiredActions'] || [];
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return false;
+    }
 
-        if (isLoggedIn) {
-          if (requiresAdmin && !this.authService.isAdmin()) {
-            this.router.navigate(['/']);
-            return false;
-          }
+    const requiresAdmin = route.data['requiresAdmin'] || false;
+    if (requiresAdmin && !this.authService.isAdmin()) {
+      this.router.navigate(['/']);
+      return false;
+    }
 
-          const userAction = this.authService.getAction();
-          if (requiredActions.length && !requiredActions.includes(userAction || '')) {
-            this.router.navigate(['/forbidden']);
-            return false;
-          }
-
-          return true;
-        } else {
-          this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-          return false;
-        }
-      })
-    );
+    return true;
   }
 }

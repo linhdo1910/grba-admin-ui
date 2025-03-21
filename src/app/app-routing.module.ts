@@ -4,9 +4,11 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Route mặc định
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'sign-up', component: SignUpComponent }, // Route mặc định
   { path: 'login', component: LoginComponent },
   {
     path: 'admin',

@@ -6,7 +6,7 @@ export interface Product {
   productPrice: number;
   productDescription?: string;
   productStock: number;
-  productCategory?: string;
+  productCategory?: string; //
   productSubCategory?: string;
   coverImage?: string;
   images?: string[]; // Mảng các chuỗi base64 hoặc URL

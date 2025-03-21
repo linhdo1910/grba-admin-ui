@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: 'user-adm',
         component: UserManagementComponent,
-        data: { title: 'Xác thực/Tài khoản' }
+        data: { title: 'UserManagement' }
       }
     ]
   },

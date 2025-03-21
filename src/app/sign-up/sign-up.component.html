@@ -1,0 +1,54 @@
+<div class="background"
+    style="background-image: url('../../assets/.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="login-container col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <h2 class="text-secondary fw-bold mb-3">Create your account</h2>
+            <p class="text-primary">Enhance your shopping experience with <b>The Kanso</b></p>
+
+            <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+                <div *ngIf="signUpError" class="alert alert-danger">{{ signUpError }}</div>
+
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="name"
+                        placeholder="Enter your name" required aria-label="Name" autocomplete="name">
+                </div>
+
+                <div class="mb-3">
+                    <input type="email" class="form-control" formControlName="email"
+                        placeholder="Type your Email" required aria-label="Email" autocomplete="email">
+                </div>
+
+                <div class="mb-3">
+                    <input type="password" class="form-control" formControlName="password"
+                        placeholder="Type your Password" required aria-label="Password" autocomplete="new-password">
+                </div>
+
+                <div class="mb-3">
+                    <input type="password" class="form-control" formControlName="confirmPassword"
+                        placeholder="Confirm Password" required aria-label="Confirm Password" autocomplete="new-password">
+                </div>
+
+                <p class="ghi_chu mb-3">Must be 8 characters at least</p>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <label><input type="checkbox" formControlName="terms"> By creating an account means you agree to the 
+                        <a href="#" class="text-primary no-underline">Terms and Conditions</a>, 
+                        and our <a href="#" class="text-primary no-underline">Privacy Policy</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm w-50 mb-3">Create account</button>
+
+                <p class="mb-3">Already have an account? <a (click)="goToLogin()" class="text-primary no-underline" style="cursor: pointer;">Login</a></p>
+
+                <div class="separator">Or</div>
+
+                <div class="social-buttons">
+                    <button class="btn btn-secondary w-100 mb-2 d-flex align-items-center justify-content-center social-button">
+                        <img src="assets/google.png" alt="Google" class="me-2" width="20" height="20"> Continue with Google
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

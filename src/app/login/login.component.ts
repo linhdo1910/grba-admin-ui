@@ -31,6 +31,7 @@ export class LoginComponent {
       this.loginError = 'Please fill in all required fields correctly.';
       return;
     }
+    
 
     const { email, password, rememberMe } = this.loginForm.value;
 
@@ -49,7 +50,9 @@ export class LoginComponent {
       }
     });
   }
-
+  goToSignUp() {
+    this.router.navigate(['/sign-up']);
+  }
   showSignupNotAvailable() {
     this.loginError = 'Sign up feature is not available yet.';
   }

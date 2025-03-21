@@ -26,7 +26,7 @@ export class UserAPIService {
   }
 
   registerUser(user: User): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/users/signup`, user, {
+    return this.http.post<any>(`${this.apiUrl}/users/sign-up`, user, {
       headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }

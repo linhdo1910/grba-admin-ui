@@ -17,9 +17,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
-      
+      const currentUrl = this.router.url;
       // Nếu chưa đăng nhập, chuyển hướng đến trang login
-      if (!this.isLoggedIn) {
+      if (!this.isLoggedIn && currentUrl !== '/login' && currentUrl !== '/sign-up') {
         this.router.navigate(['/login']);
       }
     });

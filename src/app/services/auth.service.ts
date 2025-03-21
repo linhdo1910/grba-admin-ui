@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-import { LoginResponse, User } from '../interface/User';
+import { LoginResponse, User, SignUpResponse } from '../interface/User';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -90,8 +90,24 @@ export class AuthService {
       })
     );
   }
-  
-  
+  //thêm vô
+  signUp(name: string, email: string, password: string, phoneNumber?: string, address?: string, profilePicture?: string, role: 'user' | 'admin' = 'user'): Observable<SignUpResponse> {
+    const body = { name, email, password, phoneNumber, address, profilePicture, role };
+    return this.http.post<SignUpResponse>(`${this.baseUrl}/api/users/signup`, body, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      tap(response => {
+        console.log('Sign-up API response:', response);
+        if (!response || !response.userId) {
+          throw new Error('Invalid sign-up response: Missing userId');
+        }
+      }),
+      catchError((error) => {
+        console.error('Sign-up error:', error);
+        return throwError(() => new Error(error?.error?.message || 'Sign-up failed'));
+      })
+    );
+  }
 
   logout(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/users/logout`, {

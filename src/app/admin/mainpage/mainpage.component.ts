@@ -27,7 +27,7 @@ export class MainpageComponent implements OnInit, OnDestroy {
     this.subscription = this.authService.getUserProfile().subscribe({
       next: (user) => {
         if (user) {
-          this.profileName = user.name || 'Admin';
+          this.profileName = user.name ??  'Admin';
         }
       },
       error: () => {

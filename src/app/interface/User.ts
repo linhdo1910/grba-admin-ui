@@ -6,6 +6,11 @@ export interface LoginResponse {
   message?: string;
 }
 
+export interface SignUpResponse {
+  message: string;
+  userId: string;
+}
+
 export interface User {
   _id: string | null;
   name: string;
