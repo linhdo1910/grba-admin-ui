@@ -15,11 +15,16 @@ import { UserManagementComponent } from './admin/user-management/user-management
 import { AuthInterceptor } from './services/auth.interceptor';
 import { AdminModule } from './admin/admin.module';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignUpComponent,
+    ResetPasswordComponent,
+    ForgotPasswordComponent,
     
   ],
   imports: [
@@ -28,7 +33,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     ReactiveFormsModule,
     AppRoutingModule,
     AdminRoutingModule,
-    AdminModule
+    AdminModule,
+    FormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

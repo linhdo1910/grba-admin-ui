@@ -6,6 +6,17 @@ export interface LoginResponse {
   message?: string;
 }
 
+export interface ForgotPasswordResponse {
+  message: string;
+  success: boolean;
+  userId?: string; // Tùy chọn, để gửi userId nếu cần ở bước tiếp theo
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+  success: boolean;
+}
+
 export interface SignUpResponse {
   message: string;
   userId: string;

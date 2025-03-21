@@ -56,4 +56,8 @@ export class LoginComponent {
   showSignupNotAvailable() {
     this.loginError = 'Sign up feature is not available yet.';
   }
+  goToForgotPassword() {
+    this.router.navigate(['/forgot-password']);
+  }
+
 }

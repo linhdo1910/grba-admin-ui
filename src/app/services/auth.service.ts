@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-import { LoginResponse, User, SignUpResponse } from '../interface/User';
+import { LoginResponse, User, SignUpResponse, ForgotPasswordResponse,  ResetPasswordResponse } from '../interface/User';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -109,6 +109,19 @@ export class AuthService {
     );
   }
 
+
+  forgotPassword(email: string): Observable<ForgotPasswordResponse> {
+    const body = { email };
+    return this.http.post<ForgotPasswordResponse>(`${this.baseUrl}/api/users/forgot-password`, body, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      tap(response => console.log('Forgot password API response:', response)),
+      catchError(error => {
+        console.error('Forgot password API error:', error);
+        return throwError(() => new Error(error?.error?.message || 'Failed to send reset password request'));
+      })
+    );
+  }
   logout(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/users/logout`, {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
@@ -162,7 +175,22 @@ export class AuthService {
     );
   }
 
+  resetPassword(userId: string, password: string): Observable<ResetPasswordResponse> {
+    const body = { userId, password };
+    console.log('Sending reset password request:', body); // Debug
+    return this.http.post<ResetPasswordResponse>(`${this.baseUrl}/api/users/reset-password`, body, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      tap(response => console.log('Reset password API response:', response)),
+      catchError(error => {
+        console.error('Reset password API error:', error);
+        return throwError(() => new Error(error?.error?.message || 'Failed to reset password'));
+      })
+    );
+  }
+
   getAction(): string | null {
     return localStorage.getItem('action') || sessionStorage.getItem('action');
   }
+  
 }

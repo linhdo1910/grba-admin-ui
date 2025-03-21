@@ -79,4 +79,11 @@ export class UserAPIService {
       headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/users/forgot-password`,
+      { email },
+      { headers: this.getHeaders() }
+    ).pipe(catchError(this.handleError));
+  }
 }
