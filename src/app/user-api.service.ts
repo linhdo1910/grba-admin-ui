@@ -51,7 +51,7 @@ export class UserAPIService {
     }).pipe(catchError(this.handleError));
   }
 
-  getUsers(page: number = 1, limit: number = 10, search: string = ''): Observable<{ users: User[]; total: number; pages: number }> {
+  getUsers(page: number = 1, limit: number = 10, search: string = ''): Observable<{ users: User[]; total: number; page: number }> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('limit', limit.toString());
@@ -60,7 +60,7 @@ export class UserAPIService {
       params = params.set('search', search);
     }
 
-    return this.http.get<{ users: User[]; total: number; pages: number }>(`${this.apiUrl}/users`, {
+    return this.http.get<{ users: User[]; total: number; page: number }>(`${this.apiUrl}/users/user-management`, {
       headers: this.getHeaders(),
       params
     }).pipe(catchError(this.handleError));
@@ -69,13 +69,13 @@ export class UserAPIService {
   updateUserProfile(userId: string, userData: Partial<User>): Observable<any> {
     if ('_id' in userData) delete userData._id;
 
-    return this.http.patch<any>(`${this.apiUrl}/users/${userId}`, userData, {
+    return this.http.patch<any>(`${this.apiUrl}/users/update/${userId}`, userData, {
       headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }
 
   deleteUserAccount(userId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/users/${userId}`, {
+    return this.http.delete<any>(`${this.apiUrl}/users/delete/${userId}`, {
       headers: this.getHeaders()
     }).pipe(catchError(this.handleError));
   }

@@ -17,11 +17,10 @@ export class UserManagementComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 0;
   roles = ['user', 'admin'];
-  genders = ['male', 'female'];
+  genders = ['Male', 'Female']; // Đồng bộ với HTML
   isAdmin: boolean = false;
   canEdit: boolean = false;
-  actions: string[] = ['edit all', 'account ctrl', 'sales ctrl', 'just view']; // ✅ Khởi tạo biến canEdit
-
+  actions: string[] = ['edit all', 'account ctrl', 'sales ctrl', 'just view'];
 
   constructor(
     private userService: UserAPIService,
@@ -51,8 +50,8 @@ export class UserManagementComponent implements OnInit {
     this.userService.getUsers(page, 10, this.searchKeyword).subscribe({
       next: (response) => {
         this.users = response.users;
-        this.currentPage = page;
-        this.totalPages = response.pages;
+        this.currentPage = response.page; // Lấy page từ response
+        this.totalPages = Math.ceil(response.total / 10); // Tính totalPages từ total
       },
       error: (err) => {
         console.error('Failed to load users:', err);
@@ -85,7 +84,7 @@ export class UserManagementComponent implements OnInit {
 
     const updateData = { ...this.editedUser };
     delete updateData._id;
-    delete updateData.password; // Không cập nhật password
+    delete updateData.password;
 
     this.userService.updateUserProfile(userId, updateData).subscribe({
       next: () => {
