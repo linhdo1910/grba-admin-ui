@@ -6,6 +6,7 @@ import { ProductManagementComponent } from './product-management/product-managem
 import { OrderManagementComponent } from './order-management/order-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { AuthGuard } from '../guards/auth.guard';
+import { BlogComponent } from './blog/blog.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,11 @@ const routes: Routes = [
         path: 'user-adm',
         component: UserManagementComponent,
         data: { title: 'UserManagement' }
+      },
+      { 
+        path: 'blog-adm', 
+        component: BlogComponent, 
+        data: { title: 'Quản lý bài viết' } 
       }
     ]
   },

@@ -1,5 +1,5 @@
 .login-container {
-  background-color: #edebe6;
+  background-color: #C7DD9F; /* nền chủ đạo */
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 30px;
@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   margin: 10px 0;
-  color: #666;
+  color: #517B2C; /* xanh lá trung bình cho chữ phân cách */
   font-size: 14px;
 }
 
@@ -20,7 +20,7 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: #ccc;
+  background: #90C447; /* xanh sáng dùng làm line */
 }
 
 .separator::before {
@@ -32,17 +32,40 @@
 }
 
 .btn-primary {
+  background-color: #FFA500 ; /* xanh đậm dùng cho nút chính */
+  border: none;
   border-radius: 6px;
+  color: white;
+  padding: 10px 20px;
 }
 
+.btn-primary:hover {
+  background-color: #90C447; /* xanh lá sáng – hover */
+}
+.mauchu{
+  color: #FFA500; /* màu chữ xanh đậm */
+}
 
 .social-buttons button {
   border-radius: 6px;
   font-size: 0.875rem;
+  background-color: #90C447; /* nút mạng xã hội – cam nổi bật */
+  color: white;
+}
+
+.social-buttons button:hover {
+  background-color: #e69500; /* hover màu cam đậm */
 }
 
 .no-underline {
   text-decoration: none;
+  color: #152B08; /* xanh đậm dùng cho link */
+}
+
+.ghi_chu {
+  font-size: 14px;
+  color: #517B2C; /* ghi chú bằng xanh trung tính */
+  margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
@@ -69,6 +92,5 @@
   }
 
   p {
-    font-size: 0.9rem;
-  }
-}
+    font-size: 0.
+  }}

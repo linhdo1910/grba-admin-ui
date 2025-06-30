@@ -106,19 +106,19 @@ export class ProductAPIService {
   }
 
   createProduct(product: Partial<Product>): Observable<Product> {
-    if (!product.productName || typeof product.productName !== 'string') {
+    if (!product.product_name || typeof product.product_name !== 'string') {
       return throwError(() => new Error('product_name is required and must be a string.'));
     }
-    if (typeof product.productPrice !== 'number' || product.productPrice < 0) {
+    if (typeof product.product_price !== 'number' || product.product_price < 0) {
       return throwError(() => new Error('unit_price must be a non-negative number.'));
     }
-    if (typeof product.productStock !== 'number' || product.productStock < 0) {
+    if (typeof product.product_stock !== 'number' || product.product_stock < 0) {
       return throwError(() => new Error('stocked_quantity must be a non-negative number.'));
     }
-    if (product.discount !== undefined && (product.discount < 0 || product.discount > 1)) {
+    if (product.product_discount !== undefined && (product.product_discount < 0 || product.product_discount > 1)) {
       return throwError(() => new Error('discount must be between 0 and 1.'));
     }
-    if (product.rating !== undefined && (product.rating < 0 || product.rating > 5)) {
+    if (product.product_rating !== undefined && (typeof product.product_rating === 'number') && (product.product_rating < 0 || product.product_rating > 5)) {
       return throwError(() => new Error('rating must be between 0 and 5.'));
     }
 
@@ -134,32 +134,32 @@ export class ProductAPIService {
 
   updateProduct(id: string, product: Partial<Product>): Observable<any> {
     if (
-      product.productName !== undefined &&
-      (typeof product.productName !== 'string' || !product.productName.trim())
+      product.product_name !== undefined &&
+      (typeof product.product_name !== 'string' || !product.product_name.trim())
     ) {
       return throwError(() => new Error('product_name must be a non-empty string.'));
     }
     if (
-      product.productPrice !== undefined &&
-      (typeof product.productPrice !== 'number' || product.productPrice < 0)
+      product.product_price !== undefined &&
+      (typeof product.product_price !== 'number' || product.product_price < 0)
     ) {
       return throwError(() => new Error('unit_price must be a non-negative number.'));
     }
     if (
-      product.productStock !== undefined &&
-      (typeof product.productStock !== 'number' || product.productStock < 0)
+      product.product_stock !== undefined &&
+      (typeof product.product_stock !== 'number' || product.product_stock < 0)
     ) {
       return throwError(() => new Error('stocked_quantity must be a non-negative number.'));
     }
     if (
-      product.discount !== undefined &&
-      (product.discount < 0 || product.discount > 1)
+      product.product_discount !== undefined &&
+      (product.product_discount < 0 || product.product_discount > 1)
     ) {
       return throwError(() => new Error('discount must be between 0 and 1.'));
     }
     if (
-      product.rating !== undefined &&
-      (product.rating < 0 || product.rating > 5)
+      product.product_rating !== undefined &&
+      (typeof product.product_rating === 'number' && (product.product_rating < 0 || product.product_rating > 5))
     ) {
       return throwError(() => new Error('rating must be between 0 and 5.'));
     }

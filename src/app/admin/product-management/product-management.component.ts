@@ -34,12 +34,13 @@ export class ProductManagementComponent implements OnInit {
     private authService: AuthService
   ) {
     this.productForm = this.fb.group({
-      productName: ['', Validators.required],
+      product_id: [''],
+      product_name: ['', Validators.required],
       brandName: [''],
-      productPrice: [0, [Validators.required, Validators.min(0)]],
-      productDescription: [''],
-      productStock: [0, [Validators.required, Validators.min(0)]],
-      productCategory: [''],
+      product_price: [0, [Validators.required, Validators.min(0)]],
+      product_description: [''],
+      product_stock: [0, [Validators.required, Validators.min(0)]],
+      category_id: [''],
       productSubCategory: [''],
       coverImage: [''],
       images: this.fb.array(this.images.map(() => this.fb.control(''))),
@@ -49,10 +50,12 @@ export class ProductManagementComponent implements OnInit {
       sort: [''],
       note: [''],
       status: [1, Validators.required],
-      rating: [0, [Validators.min(0), Validators.max(5)]],
-      reviews: [0, Validators.min(0)],
-      discount: [0, [Validators.min(0), Validators.max(1)]],
+      product_rating: [0, [Validators.min(0), Validators.max(5)]],
+      product_reviews: [0, Validators.min(0)],
+      product_discount: [0, [Validators.min(0), Validators.max(1)]],
       previousPrice: [''],
+      product_level: [''],
+      water_demand: [''],
     });
   }
 
@@ -115,12 +118,13 @@ export class ProductManagementComponent implements OnInit {
 
   resetFormAndImages(): void {
     this.productForm.reset({
-      productName: '',
+      product_id:'',
+      product_name: '',
       brandName: '',
-      productPrice: 0,
-      productDescription: '',
-      productStock: 0,
-      productCategory: '',
+      product_price: 0,
+      product_description: '',
+      product_stock: 0,
+      category_id: '',
       productSubCategory: '',
       coverImage: '',
       color: '',
@@ -129,10 +133,12 @@ export class ProductManagementComponent implements OnInit {
       sort: '',
       note: '',
       status: 1,
-      rating: 0,
-      reviews: 0,
-      discount: 0,
+      product_rating: 0,
+      product_reviews: 0,
+      product_discount: 0,
       previousPrice: 0,
+      water_demand: '',
+      product_level: '',
     });
     this.images = ['', '', '', '', ''];
     const fileInputs = document.querySelectorAll('input[type="file"]');
@@ -170,25 +176,25 @@ export class ProductManagementComponent implements OnInit {
     if (this.productForm.invalid) {
       // Kiểm tra từng trường bắt buộc và tạo thông báo chi tiết
       const errors: string[] = [];
-      if (this.productForm.get('productName')?.invalid) {
+      if (this.productForm.get('product_name')?.invalid) {
         errors.push('Product Name is required.');
       }
-      if (this.productForm.get('productCategory')?.invalid) {
+      if (this.productForm.get('category_id')?.invalid) {
         errors.push('Category is required.');
       }
-      if (this.productForm.get('productDescription')?.invalid) {
+      if (this.productForm.get('product_description')?.invalid) {
         errors.push('Product Description is required.');
       }
-      if (this.productForm.get('productPrice')?.invalid) {
+      if (this.productForm.get('product_price')?.invalid) {
         errors.push('Price is required and must be greater than or equal to 0.');
       }
-      if (this.productForm.get('productStock')?.invalid) {
+      if (this.productForm.get('product_stock')?.invalid) {
         errors.push('Stock Quantity is required and must be greater than or equal to 0.');
       }
-      if (this.productForm.get('discount')?.invalid) {
+      if (this.productForm.get('product_discount')?.invalid) {
         errors.push('Discount is required and must be between 0 and 1.');
       }
-      if (this.productForm.get('rating')?.invalid) {
+      if (this.productForm.get('product_rating')?.invalid) {
         errors.push('Rating is required and must be between 0 and 5.');
       }
   
@@ -225,18 +231,44 @@ export class ProductManagementComponent implements OnInit {
     this.isEditing = true;
     this.selectedProduct = product;
     this.productForm.patchValue(product);
-    this.images = product.images?.slice(0, 5) || ['', '', '', '', ''];
+    const allImages = Object.values(product.product_images || {});
+    this.images = [...allImages, '', '', '', '', ''].slice(0, 5);
     this.images.forEach((img, idx) => this.imageControls[idx].setValue(img));
   }
 
   updateProduct(): void {
     console.log('Updating product...', this.productForm.value);
+  
     if (!this.isAdmin || this.productForm.invalid || !this.selectedProduct) {
       console.log('Form invalid or not admin:', this.productForm.errors, 'isAdmin:', this.isAdmin);
       this.errorMessage = 'You do not have permission to update products or the form is invalid.';
       return;
     }
-    this.productService.updateProduct(this.selectedProduct._id!, this.productForm.value).subscribe({
+  
+    // Chỉ gửi những trường có giá trị và khác biệt
+    const formValue = this.productForm.value;
+    const cleanedData: Record<string, any> = {};
+  
+    for (const key in formValue) {
+      if (
+        formValue[key] !== null &&
+        formValue[key] !== undefined &&
+        formValue[key] !== '' &&
+        formValue[key] !== (this.selectedProduct as Record<string, any>)[key]
+      ) {
+        cleanedData[key] = formValue[key];
+      }
+    }
+  
+    console.log('Cleaned update payload:', cleanedData);
+  
+    // Không gửi nếu không có thay đổi
+    if (Object.keys(cleanedData).length === 0) {
+      this.errorMessage = 'No changes detected.';
+      return;
+    }
+  
+    this.productService.updateProduct(this.selectedProduct.product_id!, cleanedData).subscribe({
       next: (response) => {
         alert('Product updated successfully!');
         console.log('Update success:', response);
@@ -251,12 +283,12 @@ export class ProductManagementComponent implements OnInit {
     });
   }
 
-  deleteProduct(productId: string): void {
+  deleteProduct(product_id: string): void {
     if (!this.isAdmin || !confirm('Are you sure you want to delete this product?')) {
       this.errorMessage = 'You do not have permission to delete products.';
       return;
     }
-    this.productService.deleteProduct(productId).subscribe({
+    this.productService.deleteProduct(product_id).subscribe({
       next: () => this.loadProducts(),
       error: (err) => (this.errorMessage = err.message || 'Error deleting product.'),
     });
@@ -286,22 +318,22 @@ export class ProductManagementComponent implements OnInit {
     return Math.ceil(this.totalProducts / this.pageSize);
   }
 
-  isSelected(productId: string): boolean {
-    return this.selectedProducts.includes(productId);
+  isSelected(product_id: string): boolean {
+    return this.selectedProducts.includes(product_id);
   }
 
-  toggleSelect(productId: string): void {
-    if (this.isSelected(productId)) {
-      this.selectedProducts = this.selectedProducts.filter(id => id !== productId);
+  toggleSelect(product_id: string): void {
+    if (this.isSelected(product_id)) {
+      this.selectedProducts = this.selectedProducts.filter(id => id !== product_id);
     } else {
-      this.selectedProducts.push(productId);
+      this.selectedProducts.push(product_id);
     }
   }
 
   toggleSelectAll(event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
-      this.selectedProducts = this.products.map(product => product._id!);
+      this.selectedProducts = this.products.map(product => product.product_id!);
     } else {
       this.selectedProducts = [];
     }

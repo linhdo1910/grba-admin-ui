@@ -16,6 +16,7 @@ import { AuthService } from '../services/auth.service';
 import { ProductAPIService } from '../product-api.service';
 import { OrderAPIService } from '../order-api.service';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { BlogComponent } from './blog/blog.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { UserManagementComponent } from './user-management/user-management.compo
     AdminComponent,
     ProductManagementComponent,
     OrderManagementComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    BlogComponent
   ],
   imports: [
     CommonModule,

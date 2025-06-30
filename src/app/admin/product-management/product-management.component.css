@@ -6,38 +6,38 @@
 .product-management h2 {
     font-size: 24px;
     font-weight: bold;
-    color: #402A1D;
+    color: #152B08; /* xanh đậm */
 }
 
 .product-form {
     background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #90C447; /* xanh sáng */
     border-radius: 8px;
 }
 
 .product-form h4 {
     font-size: 20px;
     font-weight: bold;
-    color: #402A1D;
+    color: #152B08;
     margin-bottom: 20px;
 }
 
 .product-form .form-label {
     font-weight: 500;
-    color: #402A1D;
+    color: #152B08;
 }
 
 .product-form .form-control {
     border-radius: 4px;
-    border: 1px solid #ced4da;
+    border: 1px solid #BCDA70; /* xanh nhạt nhẹ */
     box-shadow: none;
     font-size: 14px;
     padding: 8px;
 }
 
 .product-form .form-control:focus {
-    border-color: #DAA86D;
-    box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.25);
+    border-color: #517B2C; /* xanh trung bình */
+    box-shadow: 0 0 0 2px rgba(145, 198, 71, 0.3); /* ánh xanh sáng khi focus */
 }
 
 .btn {
@@ -47,59 +47,58 @@
     border-radius: 4px;
 }
 
-
 .btn-purple {
-    background-color:#DAA86D;
+    background-color: #517B2C; /* nút chính – xanh đậm */
     color: white;
     border: none;
     transition: background-color 0.3s ease;
 }
 
 .btn-purple:hover {
-    background-color: #DAA86D;
+    background-color: #90C447; /* hover xanh sáng */
     color: white;
 }
 
 .product-list {
     background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #90C447;
     border-radius: 8px;
 }
 
 .product-list h4 {
     font-size: 20px;
     font-weight: bold;
-    color: #402A1D;
+    color: #152B08;
     margin-bottom: 20px;
 }
 
 .table {
     width: 100%;
     margin-bottom: 1rem;
-    color: #402A1D;
+    color: #152B08;
 }
 
 .table-bordered {
-    border: 1px solid #dee2e6;
+    border: 1px solid #BCDA70;
 }
 
 .table-hover tbody tr:hover {
-    background-color: #f1f3f5;
+    background-color: #C7DD9F; /* nền hover xanh nhạt */
 }
 
 .table thead th {
     vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
-    background-color: #f8f9fa;
+    border-bottom: 2px solid #BCDA70;
+    background-color: #C7DD9F;
     font-size: 14px;
     font-weight: 600;
-    color: #495057;
+    color: #152B08;
     text-align: center;
 }
 
 .table tbody td {
     font-size: 14px;
-    color: #212529;
+    color: #152B08;
     text-align: center;
 }
 
@@ -109,14 +108,14 @@
 }
 
 .table tbody td .btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
+    background-color: #FFA500; /* cam bảng màu */
+    border-color: #FFA500;
     color: #212529;
 }
 
 .table tbody td .btn-warning:hover {
-    background-color: #e0a800;
-    border-color: #d39e00;
+    background-color: #e69500;
+    border-color: #e69500;
 }
 
 .table tbody td .btn-danger {
@@ -139,12 +138,20 @@
 .pagination-controls .btn {
     font-size: 14px;
     padding: 6px 12px;
+    background-color: #FFE7D2;
+    color: #152B08;
+    border: 1px solid #90C447;
+}
+
+.pagination-controls .btn:hover {
+    background-color: #BCDA70;
+    color: #152B08;
 }
 
 .pagination-controls span {
     font-size: 14px;
     font-weight: 500;
-    color: #495057;
+    color: #517B2C;
 }
 
 .table input[type="checkbox"] {
@@ -153,5 +160,3 @@
     margin: 0;
     cursor: pointer;
 }
-
-  

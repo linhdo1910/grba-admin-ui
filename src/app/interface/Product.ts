@@ -1,25 +1,21 @@
 // product.interface.ts
 export interface Product {
-  _id?: string; // ID từ MongoDB, optional vì khi tạo mới không có
-  productName: string;
-  brandName?: string;
-  productPrice: number;
-  productDescription?: string;
-  productStock: number;
-  productCategory?: string; //
-  productSubCategory?: string;
-  coverImage?: string;
-  images?: string[]; // Mảng các chuỗi base64 hoặc URL
-  color?: string;
-  size?: string;
-  materials?: string;
-  sort?: string;
-  note?: string;
-  status: number;
-  rating?: number;
-  reviews?: number;
-  discount?: number;
-  previousPrice?: number;
-  createdAt?: string; // Từ timestamps
-  updatedAt?: string; // Từ timestamps
+  product_id?: string; // ID sản phẩm trong Realtime DB
+  product_name: string;
+  product_stock: number;
+  category_id?: string;
+  product_price: number;
+  product_description?: string;
+  product_instruction?: string;
+  product_images?: {
+    [key: string]: string; // image1, image2, image3,...
+  };
+  product_rating?: string; // VD: "5/5"
+  product_discount?: number;
+  product_reviews?: {
+    [key: string]: string; // review1, review2,...
+  };
+  product_level?: string; // VD: "Medium"
+  water_demand?: string;
+  conditions?: string;
 }

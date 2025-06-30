@@ -4,8 +4,8 @@
             <h2 class="welcome-message">Welcome, {{ profileName }}</h2>
         </div>
         <div class="col-12 col-md-auto text-md-end action-buttons">
-            <button class="btn btn-primary me-2 mb-2 mb-md-0" (click)="navigateToHome()">Return to Website</button>
-            <button class="btn btn-secondary">Change Password</button>
+            <button class="btn btn-return me-2 mb-2 mb-md-0" (click)="navigateToHome()">Return to Website</button>
+            <button class="btn btn-change-password">Change Password</button>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
                 <div class="card mb-3 recent-activity-card" *ngFor="let activity of recentActivities">
                     <div class="card-body d-flex align-items-center justify-content-between">
                         <span><i class="fa fa-edit me-2"></i>{{ activity.category }}/{{ activity.item }}</span>
-                        <span class="activity-name">{{ activity.name }}</span>
+                        <span class="activity-name"></span>
                         <i class="fa fa-clock"></i>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                                 class="fa fa-edit float-end"></i></a>
                     </li>
                     <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin'" class="menu-link">Blogs <i class="fa fa-edit float-end"></i></a>
+                        <a [routerLink]="'/admin/blog-adm'" class="menu-link">Blogs <i class="fa fa-edit float-end"></i></a>
                     </li>
                     <li class="list-group-item menu-item">
                         <a [routerLink]="'/admin'" class="menu-link">Discounts <i class="fa fa-edit float-end"></i></a>

@@ -1,0 +1,36 @@
+<div class="blog-management">
+    <h2>Quản lý Bài Viết</h2>
+  
+    <form class="blog-form" (ngSubmit)="submitForm()">
+      <h4>Thông tin bài viết</h4>
+      <input [(ngModel)]="formData.slug" name="slug" placeholder="Slug" required />
+      <input [(ngModel)]="formData.title" name="title" placeholder="Tiêu đề" required />
+      <input [(ngModel)]="formData.author" name="author" placeholder="Tác giả" required />
+      <input [(ngModel)]="formData.date" name="date" type="date" required />
+      <input [(ngModel)]="formData.image" name="image" placeholder="Link ảnh" required />
+  
+      <div *ngFor="let block of formData.content; let i = index">
+        <select [(ngModel)]="block.type" [name]="'type' + i">
+          <option value="HEADING">Heading</option>
+          <option value="PARAGRAPH">Paragraph</option>
+        </select>
+        <input [(ngModel)]="block.value" [name]="'value' + i" placeholder="Nội dung đoạn" />
+        <button type="button" (click)="removeBlock(i)">X</button>
+      </div>
+  
+      <button type="button" class="btn btn-green" (click)="addBlock()">+ Thêm đoạn</button>
+      <button type="submit" class="btn btn-green">Lưu</button>
+      <button type="button" class="btn btn-cancel" (click)="resetForm()">Hủy</button>
+    </form>
+  
+    <div class="blog-list">
+      <h4>Danh sách Bài Viết</h4>
+      <div *ngFor="let blog of blogs" class="blog-card">
+        <h5>{{ blog.title }}</h5>
+        <p>Tác giả: {{ blog.author }} | {{ blog.date }}</p>
+        <button class="btn btn-warning" (click)="editBlog(blog)">Sửa</button>
+        <button class="btn btn-danger" (click)="deleteBlog(blog.slug)">Xoá</button>
+      </div>
+    </div>
+  </div>
+  

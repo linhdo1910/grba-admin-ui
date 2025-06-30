@@ -1,93 +1,128 @@
+:root {
+  --green-dark: #152B08;
+  --green-mid: #517B2C;
+  --green-bright: #90C447;
+  --green-light: #BCDA70;
+  --green-pale: #C7DD9F;
+  --beige: #FFE7D2;
+  --orange: #FFA500;
+
+  --text-color: #152B08;
+  --background-color: #FFE7D2;
+  --button-color: #517B2C;
+  --button-hover: #90C447;
+  --social-color: #FFA500;
+  --social-hover: #e69500;
+  --note-color: #666666;
+  --divider-color: #CCCCCC;
+}
+
 .login-container {
-    background-color: #edebe6;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 30px;
-    text-align: center;
-    backdrop-filter: blur(12px);
+  background-color: var(--beige);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  color: var(--text-color);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  margin: 16px 0;
+  color: var(--note-color);
+  font-size: 14px;
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--divider-color);
+}
+
+.separator::before {
+  margin-right: 10px;
+}
+
+.separator::after {
+  margin-left: 10px;
+}
+
+.btn-primary {
+  background-color: var(--button-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--button-hover);
+}
+
+.social-buttons button {
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background-color: var(--social-color);
+  color: white;
+  padding: 10px 16px;
+  margin: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.social-buttons button:hover {
+  background-color: var(--social-hover);
+}
+
+.no-underline {
+  text-decoration: none;
+  color: var(--green-dark);
+}
+
+.no-underline:hover {
+  text-decoration: underline;
+}
+
+.ghi_chu {
+  font-size: 14px;
+  color: var(--note-color);
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 24px;
   }
-  
-  .separator {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-    color: #666;
-    font-size: 14px;
-  }
-  
-  .separator::before,
-  .separator::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #ccc;
-  }
-  
-  .separator::before {
-    margin-right: 10px;
-  }
-  
-  .separator::after {
-    margin-left: 10px;
-  }
-  
+
   .btn-primary {
-    background-color: #DAA86D; /* Màu nâu nhạt giống nút Login */
-    border: none;
-    border-radius: 6px;
-    color: white;
-    padding: 10px 20px;
+    font-size: 0.9rem;
   }
-  
-  .btn-primary:hover {
-    background-color: #c28b4d; /* Hiệu ứng hover */
+}
+
+@media (max-width: 576px) {
+  .login-container {
+    padding: 16px;
   }
-  
-  .social-buttons button {
-    border-radius: 6px;
-    font-size: 0.875rem;
-    background-color: #8B6F47; /* Màu nâu đậm giống nút Google trong Login */
-    color: white;
+
+  .btn-primary {
+    font-size: 0.85rem;
   }
-  
-  .social-buttons button:hover {
-    background-color: #704d2b; /* Hiệu ứng hover */
+
+  h2 {
+    font-size: 1.5rem;
   }
-  
-  .no-underline {
-    text-decoration: none;
+
+  p {
+    font-size: 0.95rem;
   }
-  
-  .ghi_chu {
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 10px;
-  }
-  
-  @media (max-width: 768px) {
-    .login-container {
-      padding: 20px;
-    }
-  
-    .btn-primary {
-      font-size: 0.8rem;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .login-container {
-      padding: 15px;
-    }
-  
-    .btn-primary {
-      font-size: 0.75rem;
-    }
-  
-    h2 {
-      font-size: 1.5rem;
-    }
-  
-    p {
-      font-size: 0.9rem;
-    }
-  }
+}

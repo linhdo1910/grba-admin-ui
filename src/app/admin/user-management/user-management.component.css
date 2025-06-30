@@ -1,95 +1,155 @@
-.container {
-    max-width: 100%;
-}
-
-.input-group {
-    flex: 1;
-    margin-right: 10px;
-    padding: 8px 16px;
-    font-size: 14px;
-}
-
-
-.table {
-    margin-top: 20px;
-    border-collapse: separate;
-    border-spacing: 0;
-    background-color: #fff;
+.user-management {
+    padding: 24px;
+    background-color: #f9fff4;
     border-radius: 8px;
-    overflow: hidden;
-}
-
-.table th {
-    text-align: center;
-    vertical-align: middle;
-}
-
-.table th,
-.table td {
-    padding: 15px;
-    text-align: center;
-}
-
-.table td:nth-child(4),
-.table td:nth-child(5) {
-    width: 15%;
-}
-
-.btn-warning,
-.btn-danger,
-.btn-success,
-.btn-secondary {
-    min-width: 60px;
-    padding: 5px 8px;
+  }
+  
+  .user-management .input-group .form-control {
+    border: 1px solid #BCDA70;
+    border-radius: 6px 0 0 6px;
     font-size: 14px;
+    padding: 8px;
+  }
+  
+  .user-management .input-group .btn {
+    border: 1px solid #90C447;
+    background-color: #FFE7D2;
+    color: #152B08;
+    font-weight: 500;
+  }
+  .custom-thead {
+  background-color: #C7DD9F !important; /* xanh nhạt nhẹ */
+  color: #152B08 !important;            /* chữ xanh đậm */
+  font-weight: 600;
+  text-align: center;
+}
+
+.custom-thead th {
+  vertical-align: middle;
+  background-color: #C7DD9F !important;
+  border-bottom: 2px solid #BCDA70 !important; ; 
+  font-size: 14px;
+}
+  .user-management .btn-primary {
+    background-color: #517B2C;
+    border: none;
+    color: white;
+    font-weight: 500;
+  }
+  .btn-wide {
+    min-width: 120px;
     white-space: nowrap;
-}
-
-.table td input,
-.table td select {
-    max-width: 100%;
-    font-size: 14px;
-    padding: 5px;
-}
-
-.pagination {
+  }
+  .user-management .btn-primary:hover {
+    background-color: #90C447;
+    color: white;
+  }
+  
+  .table {
     margin-top: 20px;
-}
-
-.pagination .page-link {
-    color: #6a1b9a;
-}
-
-.pagination .page-link:hover {
-    background-color: #f1f1f1;
-    color: #4a148c;
-}
-
-.pagination .page-item.active .page-link {
-    background-color: #6a1b9a;
-    border-color: #6a1b9a;
+    font-size: 14px;
+    color: #152B08;
+    border: 1px solid #BCDA70;
+  }
+  
+  .table thead {
+    background-color: #C7DD9F;
+    color: #152B08;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #F6FFE3;
+  }
+  
+  .table tbody td {
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  .table input,
+  .table select {
+    width: 100%;
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #BCDA70;
+    background-color: #F8FFF2;
+  }
+  
+  .table input:focus,
+  .table select:focus {
+    border-color: #517B2C;
+    box-shadow: 0 0 0 2px rgba(145, 198, 71, 0.3);
+    outline: none;
+  }
+  
+  .btn-sm {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  
+  .btn-success {
+    background-color: #517B2C;
+    border: none;
     color: #fff;
-}
-
-@media (max-width: 768px) {
-
-    .table th,
-    .table td {
-        font-size: 12px;
-        padding: 10px;
-    }
-
-    .btn {
-        font-size: 12px;
-        padding: 5px 8px;
-    }
-
-    .input-group {
-        width: 100%;
-    }
-
-    .pagination .page-link {
-        padding: 0.5rem 0.75rem;
-        font-size: 14px;
-    }
-}
+  }
+  
+  .btn-success:hover {
+    background-color: #90C447;
+  }
+  
+  .btn-warning {
+    background-color: #FFA500;
+    border: none;
+    color: white;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e69500;
+  }
+  
+  .btn-secondary {
+    background-color: #FFE7D2;
+    border: 1px solid #BCDA70;
+    color: #152B08;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #C7DD9F;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #b21f2d;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+  }
+  
+  .page-link {
+    color: #517B2C;
+    font-weight: 500;
+    border: 1px solid #BCDA70;
+  }
+  
+  .page-item.active .page-link {
+    background-color: #90C447;
+    color: white;
+    border-color: #90C447;
+  }
+  
+  .page-item.disabled .page-link {
+    background-color: #f0f0f0;
+    color: #aaa;
+  }
+  

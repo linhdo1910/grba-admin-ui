@@ -12,8 +12,8 @@
 }
 
 .topbar {
-  background-color:#F7F7F7;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: #C7DD9F; /* nền xanh nhạt cho topbar */
+  border-bottom: 1px solid #90C447; /* viền nhẹ màu sáng */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,7 +24,7 @@
 .content {
   flex-grow: 1;
   padding: 10px;
-  background-color: #f9f5f0;
+  background-color: #C7DD9F ; /* nền be nhẹ cho content */
 }
 
 .user-info {
@@ -36,7 +36,7 @@
 
 .user-name {
   font-weight: bold;
-  color: #DAA86D;
+  color: #517B2C; /* xanh trung tính cho tên user */
 }
 
 @media (max-width: 768px) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderAPIService } from '../../order-api.service';
 import { AuthService } from '../../services/auth.service';
-import { Order, OrderStatus } from '../../interface/Order'; // Import từ file interface mới
+import { Order, OrderStatus } from '../../interface/Order';
 
 interface StatusOption {
   value: OrderStatus;
@@ -18,7 +18,7 @@ interface StatusOption {
 })
 export class OrderManagementComponent implements OnInit {
   orders: Order[] = [];
-  filterOption: string = '_id'; // Thay 'orderId' bằng '_id' để khớp với schema
+  filterOption: string = 'orderId'; // ✅ Thêm để fix lỗi [(ngModel)]
   searchQuery: string = '';
   statusFilter: string = '';
   currentPage: number = 1;
@@ -27,13 +27,11 @@ export class OrderManagementComponent implements OnInit {
   canEdit: boolean = false;
   isAdmin: boolean = false;
 
-  // Cập nhật statusOptions để khớp với OrderStatus từ schema
   statusOptions: StatusOption[] = [
-    { value: 'Pending', label: 'Pending', icon: 'fas fa-hourglass-half', iconClass: 'text-warning' },
-    { value: 'Processing', label: 'Processing', icon: 'fas fa-cogs', iconClass: 'text-info' },
-    { value: 'Delivering', label: 'Delivering', icon: 'fas fa-truck', iconClass: 'text-primary' },
-    { value: 'Finished', label: 'Finished', icon: 'fas fa-check-circle', iconClass: 'text-success' },
-    { value: 'Cancelled', label: 'Cancelled', icon: 'fas fa-times-circle', iconClass: 'text-danger' }
+    { value: 'preparing', label: 'Preparing', icon: 'fas fa-hourglass-half', iconClass: 'text-warning' },
+    { value: 'shipping', label: 'Shipping', icon: 'fas fa-truck', iconClass: 'text-info' },
+    { value: 'delivered', label: 'Delivered', icon: 'fas fa-check-circle', iconClass: 'text-success' },
+    { value: 'cancelled', label: 'Cancelled', icon: 'fas fa-times-circle', iconClass: 'text-danger' }
   ];
 
   constructor(
@@ -67,23 +65,19 @@ export class OrderManagementComponent implements OnInit {
   loadOrders(): void {
     this.orderService.getOrders(this.currentPage, this.pageSize, this.searchQuery, this.statusFilter).subscribe({
       next: (data) => {
-        this.orders = data.orders.map((order: Order) => ({
-          ...order,
-          userName: order.userName || 'Anonymous',
-          orderDate: new Date(order.orderDate), // Thay createdAt bằng orderDate
-          createdAt: new Date(order.createdAt) // Giữ lại từ timestamps
-        }));
+        this.orders = data.orders;
+        console.log('[DEBUG] Orders from backend:', this.orders);
         this.totalOrders = data.total;
       },
       error: (err) => {
-        alert('An error occurred while loading the orders. Please try again.');
+        alert('An error occurred while loading the orders.');
         console.error('Error loading orders:', err);
       }
     });
   }
 
   updateOrderStatus(order: Order, newStatus: string): void {
-    const validStatuses: OrderStatus[] = ['Pending', 'Processing', 'Delivering', 'Finished', 'Cancelled'];
+    const validStatuses: OrderStatus[] = ['preparing', 'shipping', 'delivered', 'cancelled'];
     if (!validStatuses.includes(newStatus as OrderStatus)) {
       alert('Invalid status value.');
       return;
@@ -96,71 +90,67 @@ export class OrderManagementComponent implements OnInit {
       return;
     }
 
-    if (!order._id) {
-      alert('Order ID is missing.');
+    if (!order.userId || !order.orderId) {
+      alert('Missing order ID or user ID.');
       return;
     }
 
-    if (!confirm(`Are you sure you want to update the status to ${newStatus}?`)) {
-      return;
-    }
+    if (!confirm(`Are you sure you want to update the status to "${status}"?`)) return;
 
-    this.orderService.updateOrderStatus(order._id, status).subscribe({
+    this.orderService.updateOrderStatus(order.userId, order.orderId, status).subscribe({
       next: () => {
         order.status = status;
         alert('Order status updated successfully.');
       },
       error: (err) => {
-        alert('Failed to update order status. Please try again.');
+        alert('Failed to update order status.');
         console.error('Error updating order status:', err);
       }
     });
   }
 
-  cancelOrder(orderId: string): void {
+  cancelOrder(order: Order): void {
     if (!this.isAdmin) {
       alert('You do not have permission to cancel orders.');
       return;
     }
 
-    if (!orderId) {
-      alert('Order ID is missing.');
+    if (!order.userId || !order.orderId) {
+      alert('Missing order ID or user ID.');
       return;
     }
 
-    if (!confirm('Are you sure you want to cancel this order?')) {
-      return;
-    }
+    if (!confirm('Are you sure you want to cancel this order?')) return;
 
-    this.orderService.cancelOrder(orderId).subscribe({
+    this.orderService.cancelOrder(order.userId, order.orderId).subscribe({
       next: () => {
         alert('Order cancelled successfully.');
         this.loadOrders();
       },
       error: (err) => {
-        alert('Failed to cancel the order. Please try again.');
+        alert('Failed to cancel the order.');
         console.error('Error cancelling order:', err);
       }
     });
   }
 
-  downloadInvoice(orderId: string): void {
-    if (!orderId) {
-      alert('Order ID is missing.');
+  downloadInvoice(order: Order): void {
+    if (!order.userId || !order.orderId) {
+      alert('Missing order ID or user ID.');
       return;
     }
 
-    this.orderService.downloadInvoice(orderId).subscribe({
+    this.orderService.downloadInvoice(order.userId, order.orderId).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `invoice_${orderId}.pdf`;
+        a.download = `invoice_${order.orderId}.pdf`;
         a.click();
         window.URL.revokeObjectURL(url);
       },
       error: (err) => {
-        alert('Failed to download the invoice. Please try again.');
+        alert('Failed to download the invoice.');
         console.error('Error downloading invoice:', err);
       }
     });
@@ -178,12 +168,8 @@ export class OrderManagementComponent implements OnInit {
     return this.statusOptions.find(option => option.value === status)?.label || status;
   }
 
-  createOrder(): void {
-    console.log('Create order functionality to be implemented.');
-  }
-
   isPaid(order: Order): boolean {
-    return order.paymentMethod !== 'COD' || order.status === 'Finished'; // Thay 'cash_on_delivery' bằng 'COD' và 'completed' bằng 'Finished'
+    return order.payment_info.method !== 'COD' || order.status === 'delivered';
   }
 
   nextPage(): void {
@@ -198,5 +184,10 @@ export class OrderManagementComponent implements OnInit {
       this.currentPage--;
       this.loadOrders();
     }
+  }
+
+  // ✅ Thêm hàm giả để tránh lỗi khi click Create Order
+  createOrder(): void {
+    alert('Create Order feature is not implemented yet.');
   }
 }

@@ -31,13 +31,13 @@
         </thead>
         <tbody>
             <tr *ngFor="let order of orders">
-                <td>{{ order._id || 'N/A' }}</td> <!-- Giữ nguyên vì đã khớp -->
+                <td>{{ order.orderId || 'N/A' }}</td> <!-- Giữ nguyên vì đã khớp -->
                 <td>{{ order.userName || 'Anonymous' }}</td> <!-- Giữ nguyên vì đã khớp -->
-                <td>{{ order.totalPrice | currency }}</td> <!-- Giữ nguyên vì đã khớp -->
+                <td>{{ order.payment_info.total | currency }}</td> <!-- Giữ nguyên vì đã khớp -->
                 <td>
                     <input type="checkbox" class="form-check-input" [checked]="isPaid(order)" disabled>
                 </td>
-                <td>{{ order.orderDate | date: 'dd/MM/yyyy hh:mm a' }}</td> <!-- Thay 'createdAt' bằng 'orderDate' -->
+                <td>{{ order.createdAt | date: 'dd/MM/yyyy hh:mm a' }}</td> <!-- Thay 'createdAt' bằng 'orderDate' -->
                 <td>
                     <div class="d-flex align-items-center">
                         <i [class]="getStatusIcon(order.status)" [ngClass]="getStatusClass(order.status)"></i>
@@ -50,10 +50,10 @@
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <button class="btn btn-danger btn-sm" [disabled]="!order._id" (click)="cancelOrder(order._id!)"
+                        <button class="btn btn-danger btn-sm" [disabled]="!order.orderId" (click)="cancelOrder(order)"
                             *ngIf="canEdit">Cancel Order</button>
-                        <button class="btn btn-success btn-sm" [disabled]="!order._id"
-                            (click)="downloadInvoice(order._id!)">Export Invoice</button>
+                        <button class="btn btn-success btn-sm" [disabled]="!order.orderId"
+                            (click)="downloadInvoice(order)">Export Invoice</button>
                     </div>
                 </td>
             </tr>

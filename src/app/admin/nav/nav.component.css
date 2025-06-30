@@ -1,9 +1,9 @@
 .sidebar {
     width: 250px;
     height: 100vh;
-    background-color: #D9D3C5;
-    top:0;
-    left:0;
+    background-color: #C7DD9F; /* nền xanh lá nhạt chủ đạo */
+    top: 0;
+    left: 0;
     position: fixed;
 }
 
@@ -16,12 +16,12 @@
 .nav-link {
     font-size: 16px;
     font-weight: 500;
-    color: #402A1D;
+    color: #152B08; /* xanh đậm cho chữ mặc định */
     text-decoration: none;
 }
 
 .nav-link:hover {
-    color: #DAA86D;
+    color: #517B2C; /* xanh trung bình khi hover */
 }
 
 .collapse .nav-link {
@@ -29,7 +29,7 @@
 }
 
 .collapse .nav-link:hover {
-    color: #DAA86D;
+    color: #517B2C;
 }
 
 .nav-item .nav-item {

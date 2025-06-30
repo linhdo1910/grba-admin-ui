@@ -12,35 +12,47 @@
         <form [formGroup]="productForm" (ngSubmit)="isEditing ? updateProduct() : createProduct()">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="productName" class="form-label">Product Name</label>
-                    <input type="text" id="productName" formControlName="productName" class="form-control" />
+                    <label for="product_id" class="form-label">Product ID</label>
+                    <input type="text" id="product_id" formControlName="product_id" class="form-control" />
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="productCategory" class="form-label">Category</label>
-                    <input type="text" id="productCategory" formControlName="productCategory" class="form-control" />
+                    <label for="product_name" class="form-label">Product Name</label>
+                    <input type="text" id="product_name" formControlName="product_name" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="category_id" class="form-label">Category</label>
+                    <input type="text" id="category_id" formControlName="category_id" class="form-control" />
                 </div>
 
                 <div class="col-12 mb-3">
-                    <label for="productDescription" class="form-label">Product Description</label>
-                    <textarea id="productDescription" formControlName="productDescription" class="form-control" rows="3"
+                    <label for="product_description" class="form-label">Product Description</label>
+                    <textarea id="product_description" formControlName="product_description" class="form-control" rows="3"
                         placeholder="Enter product description..."></textarea>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label for="productPrice" class="form-label">Price</label>
-                    <input type="number" id="productPrice" formControlName="productPrice" class="form-control" />
+                    <label for="product_price" class="form-label">Price</label>
+                    <input type="number" id="product_price" formControlName="product_price" class="form-control" />
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="productStock" class="form-label">Stock Quantity</label>
-                    <input type="number" id="productStock" formControlName="productStock" class="form-control" />
+                    <label for="product_stock" class="form-label">Stock Quantity</label>
+                    <input type="number" id="product_stock" formControlName="product_stock" class="form-control" />
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="discount" class="form-label">Discount (%)</label>
-                    <input type="number" id="discount" formControlName="discount" class="form-control" />
+                    <label for="product_discount" class="form-label">Discount (%)</label>
+                    <input type="number" id="product_discount" formControlName="product_discount" class="form-control" />
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="rating" class="form-label">Rating</label>
-                    <input type="number" id="rating" formControlName="rating" class="form-control" />
+                    <label for="product_rating" class="form-label">Rating</label>
+                    <input type="number" id="product_rating" formControlName="product_rating" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="product_level" class="form-label">Level</label>
+                    <textarea id="product_level" formControlName="product_level" class="form-control" rows="1"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="water_demand" class="form-label">Water demand</label>
+                    <textarea id="water_demand" formControlName="water_demand" class="form-control" rows="1"></textarea>
                 </div>
 
                 <div class="col-12">
@@ -90,29 +102,29 @@
             <tbody>
                 <tr *ngFor="let product of products; let i = index">
                     <td>
-                        <input type="checkbox" [checked]="isSelected(product._id!)"
-                            (change)="toggleSelect(product._id!)" />
+                        <input type="checkbox" [checked]="isSelected(product.product_id!)"
+                            (change)="toggleSelect(product.product_id!)" />
                     </td>
                     <td>{{ i + 1 + (currentPage - 1) * pageSize }}</td>
-                    <td>{{ product.productName }}</td>
-                    <td>{{ product.productCategory }}</td>
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.category_id }}</td>
                     <td>
-                        <ng-container *ngIf="product.productDescription as desc">
+                        <ng-container *ngIf="product.product_description as desc">
                           {{ desc | slice:0:30 }}<span *ngIf="desc.length > 30">...</span>
                         </ng-container>
-                        <ng-container *ngIf="!product.productDescription">
+                        <ng-container *ngIf="!product.product_description">
                           <!-- Hiển thị khi không có mô tả -->
                         </ng-container>
                       </td>
-                    <td>{{ product.productPrice | currency }}</td>
-                    <td>{{ product.productStock }}</td>
-                    <td>{{ (product.discount ?? 0) * 100 }}%</td>
-                    <td>{{ product.rating }}</td>
+                      <td>{{ product.product_price | number:'1.0-0' }} VNĐ</td>
+                    <td>{{ product.product_stock }}</td>
+                    <td>{{ (product.product_discount ?? 0) * 1 }}%</td>
+                    <td>{{ product.product_rating }}</td>
                     <td>
                         <button *ngIf="canEdit" class="btn btn-warning btn-sm me-2 d-inline"
                             (click)="editProduct(product)">Edit</button>
                         <button *ngIf="canEdit" class="btn btn-danger btn-sm d-inline"
-                            (click)="deleteProduct(product._id!)">Delete</button>
+                            (click)="deleteProduct(product.product_id!)">Delete</button>
                     </td>
                 </tr>
                 <tr *ngIf="products.length === 0">
